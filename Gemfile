@@ -9,6 +9,7 @@ group :assets do
   gem 'coffee-rails'
   gem 'therubyracer', platforms: :ruby
   gem 'less-rails'
+  gem 'uglifier'
 end
 
 gem 'jquery-rails'

@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Volmerius</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+  <head>
+    <title>Volmerius</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <div class="wrap">
+      <div id="layout_top">
+        <div class="container"><%= render 'layouts/top' %></div>
+      </div>
 
-<%= yield %>
+      <div class="container" id="main_container">
+        <%= yield %>
+      </div>
 
-</body>
+      <div id="push"></div>
+    </div>
+
+    <footer>
+      <div class="container"><%= render 'layouts/footer' %></div>
+    </footer>
+  </body>
 </html>

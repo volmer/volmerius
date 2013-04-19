@@ -20,6 +20,7 @@ gem 'responders'
 gem 'simple_form'
 gem 'twitter-bootstrap-rails'
 gem 'gravatar_image_tag'
+gem 'http_accept_language', '~> 2.0.0.pre'
 
 group :test, :development do
   gem 'rspec-rails'

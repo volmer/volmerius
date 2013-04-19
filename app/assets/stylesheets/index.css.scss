@@ -1,11 +1,48 @@
-img#volmerius-photo {
-  transition: all .5s ease-in-out;
-  opacity: 0.6;
-}
+#page-content {
+  section#presentation {
+    margin-bottom: 30px;
 
-img#volmerius-photo:hover {
-  /*-moz-transform: scale(1.3);
-  -webkit-transform: scale(1.3);
-  transform: scale(1.3);*/
-  opacity: 1;
+    img {
+      transition: all .5s ease-in-out;
+      opacity: 0.6;
+    }
+
+    img:hover {
+      opacity: 1;
+    }
+  }
+
+  #links {
+    section {
+      background-color: #333;
+      margin-bottom: 20px;
+      padding: 10px;
+      border-top-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+      border: 1px solid #222;
+      box-shadow: inset -1px -1px 4px #222;
+
+      h1 {
+        font-weight: normal;
+        font-family: 'Denk One', sans-serif;
+        font-size: 28px;
+        text-align: center;
+        margin: 0 0 10px;
+        text-shadow: 0 2px 2px #111;
+      }
+
+      li {
+        line-height: 24px;
+
+        a {
+          font-size: 20px;
+          text-shadow: 0 2px 1px #222;
+        }
+
+        a:hover {
+          background-color: #444;
+        }
+      }
+    }
+  }
 }

@@ -11,12 +11,12 @@
   <body>
     <div id="wrap">
       <div class="container" id="main_container">
-        <div id="layout_top"><%= render 'layouts/top' %></div>
+        <header id="top">
+          <h1>Volmerius</h1>
+        </header>
 
-        <div class="row">
-          <div class="span3"><%= render 'layouts/sidebar' %></div>
-
-          <div class="span9" id="page_content"><%= yield %></div>
+        <div id="page-content">
+          <%= yield %>
         </div>
       </div>
       <div id="push"></div>

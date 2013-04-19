@@ -19,6 +19,7 @@ gem 'unicorn'
 gem 'responders'
 gem 'simple_form'
 gem 'twitter-bootstrap-rails'
+gem 'gravatar_image_tag'
 
 group :test, :development do
   gem 'rspec-rails'

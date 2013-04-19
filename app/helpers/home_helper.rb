@@ -6,4 +6,8 @@ module HomeHelper
       end
     end
   end
+
+  def volmer_avatar
+    gravatar_image_tag 'volmerius@gmail.com', class: 'img-circle', gravatar: {size: 200, rating: 'x'}
+  end
 end

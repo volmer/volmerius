@@ -56,5 +56,6 @@ production:
   encoding: unicode
   database: volmerius_production
   pool: 5
-  username: volmerius
-  password:
+  username: mundodastrevas
+  password: mundodastrevas
+  port: <%= ENV['BOXEN_POSTGRESQL_PORT'] || '5432' %>

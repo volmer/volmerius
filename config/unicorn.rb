@@ -8,7 +8,7 @@ preload_app true
 # nuke workers after 30 seconds instead of 60 seconds (the default)
 timeout 30
 
-working_directory '/home/volmer/projects/volmeirus'
+working_directory '/home/volmer/projects/volmerius'
 
 before_fork do |server, worker|
   old_pid = "#{server.config[:pid]}.oldbin"

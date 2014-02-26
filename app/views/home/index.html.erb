@@ -1,69 +1,9 @@
-<section id="presentation">
-  <%= volmer_avatar %>
-</section>
+<div class="jumbotron">
+  <h1>
+    Volmerius
+  </h1>
 
-<div id="links">
-  <div class="row">
-    <div class="span4">
-      <section>
-        <h1><%= t 'section.technology' %></h1>
-        <ul class="nav nav-list">
-          <%= link_li 'icon-github', 'GitHub', 'https://github.com/volmer' %>
-          <%= link_li 'icon-lightbulb', 'Rubygems', 'https://rubygems.org/profiles/volmer' %>
-        </ul>
-      </section>
-    </div>
-
-    <div class="span4">
-      <section>
-        <h1><%= t 'section.music' %></h1>
-        <ul class="nav nav-list">
-          <%= link_li 'icon-bolt', 'Radicaos', 'http://radicaos.com' %>
-          <%= link_li 'icon-play-circle', 'Soundcloud', 'https://soundcloud.com/volmer' %>
-        </ul>
-      </section>
-    </div>
-
-    <div class="span4">
-      <section>
-        <h1><%= t 'section.projects' %></h1>
-        <ul class="nav nav-list">
-          <%= link_li 'icon-edit', 'Bootsy', 'http://volmer.github.io/bootsy' %>
-          <%= link_li 'icon-group', 'Raddar', 'https://github.com/volmer/raddar' %>
-        </ul>
-      </section>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="span4">
-      <section>
-        <h1><%= t 'section.social' %></h1>
-        <ul class="nav nav-list">
-          <%= link_li 'icon-twitter', 'Twitter', 'https://twitter.com/volmerius' %>
-          <%= link_li 'icon-github', 'GitHub', 'https://github.com/volmer' %>
-        </ul>
-      </section>
-    </div>
-
-    <div class="span4">
-      <section>
-        <h1><%= t 'section.professional' %></h1>
-        <ul class="nav nav-list">
-          <%= link_li 'icon-linkedin-sign', 'Linkedin', 'http://www.linkedin.com/in/volmerius' %>
-          <%= link_li 'icon-github', 'GitHub', 'https://github.com/volmer' %>
-        </ul>
-      </section>
-    </div>
-
-    <div class="span4">
-      <section>
-        <h1><%= t 'section.pandoras_box' %></h1>
-        <ul class="nav nav-list">
-          <%= link_li 'icon-group', 'Mundo das Trevas', 'http://mundodastrevas.com' %>
-          <%= link_li 'icon-laptop', 'Codeschool', 'http://www.codeschool.com/users/volmer' %>
-        </ul>
-      </section>
-    </div>
-  </div>
+  <p>
+    <%= link_to 'Bota-fora do Volmerius', sale_path, class: 'btn btn-primary btn-lg' %>
+  </p>
 </div>

@@ -1,3 +1,4 @@
 Volmerius::Application.routes.draw do
-  root to: 'home#index'
+  root 'home#index'
+  get 'sale' => 'home#sale', as: 'sale'
 end

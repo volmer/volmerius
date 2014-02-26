@@ -1,15 +1,7 @@
-<footer>
+<footer id="sticky-footer">
   <div class="container">
-    <div class="row">
-      <div class="span6">
-        <p>&copy; 2012 - <%= Time.now.year %> Volmer Soares.</p>
-      </div>
-
-      <div class="span6 clearfix">
-        <ul class="nav nav-pills pull-right" id="locale-selector">
-          <%= locale_items I18n.locale %>
-        </nav>
-      </div>
-    </div>
+    <ul class="list-inline text-center">
+      <li><%= link_to 'Twitter', 'http://twitter.com/volmerius', target: '_blank' %></li>
+    </ul>
   </div>
 </footer>

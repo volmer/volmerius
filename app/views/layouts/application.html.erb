@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
   <head>
-    <title>Volmerius</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%= stylesheet_link_tag    "application", media: "all" %>
-    <%= javascript_include_tag "application" %>
-    <%= csrf_meta_tags %>
-    <%= favicon_link_tag %>
-  </head>
-  <body>
-    <div id="wrap">
-      <div class="container" id="main_container">
-        <header id="top">
-          <h1>Volmerius</h1>
-        </header>
+    <title>
+      <%= [content_for(:page_title), 'Volmerius'].reject(&:blank?).join(' · ') %>
+    </title>
 
-        <div id="page-content">
-          <%= yield %>
-        </div>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+
+    <%= csrf_meta_tags %>
+
+    <%= render 'layouts/head' %>
+  </head>
+
+  <body>
+    <div id="content-wrapper">
+      <%= render 'layouts/navbar' %>
+
+      <%= render 'layouts/top' %>
+
+      <div class='container' id='main-container'>
+        <%= render 'layouts/alerts' %>
+
+        <%= yield %>
       </div>
-      <div id="push"></div>
     </div>
 
     <%= render 'layouts/footer' %>
+
+    <%= javascript_include_tag 'application' %>
   </body>
 </html>

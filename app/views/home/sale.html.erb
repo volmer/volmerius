@@ -1,276 +1,304 @@
-<div class="jumbotron">
-  <h1>
-    Bota-fora do Volmerius
-  </h1>
+<div id="sale">
+  <div class="jumbotron">
+    <h1>
+      Bota-fora do Volmerius
+    </h1>
 
-  <p>
-    Olá, amigos! Está chegando a hora de partir e preciso vender minhas coisas.
-    Todos os itens estão muito bem conservados, com 5 meses ou menos de uso.
-    Interessados podem entrar em contato comigo pelos canais internéticos de sempre
-    ou pelo email glamuroso <%= mail_to 'volmervendas@gmail.com' %>.
-  </p>
+    <p>
+      Olá, amigos! Está chegando a hora de partir e preciso vender meus espólios.
+      Todos os itens estão muito bem conservados, com 5 meses ou menos de uso.
+      Interessados podem entrar em contato comigo pelos canais internéticos de sempre
+      ou pelo email glamuroso <%= mail_to 'volmervendas@gmail.com' %>.
+    </p>
 
-  <p>
-    Quem puder, por favor, repasse a lista para os seus amigos. Eu agradeço muito!
-    Lembrando que os itens devem ser retirados <em>chez moi</em> na rua Antônio Carlos, próximo
-    ao metrô Consolação.
-  </p>
+    <p>
+      Quem puder, por favor, repasse a lista para os seus amigos. Eu agradeço muito!
+      Lembrando que os itens devem ser retirados <em>chez moi</em> na rua Antônio Carlos, próximo
+      ao metrô Consolação.
+    </p>
 
-</div>
+  </div>
 
-<div class="row">
-  <div class="col-sm-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Sofá-cama</h3>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel panel-default" id="sofa">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <%= link_to 'Sofá-cama', 'http://gruposoforte.com.br/portfolio-type/giorgia/', target: '_blank' %>
+          </h3>
+        </div>
+
+        <%= link_to ' ', '#image-modal', class: 'merchandise-image', data: { toggle: 'modal' } %>
+
+        <div class="panel-body">
+          <p>
+            Sofá de 2 lugares em tecido suede que, como por magia, transforma-se numa cama de casal.
+            Para receber os amigos sem-teto da madrugada.
+          </p>
+
+          <dl class="dl-horizontal">
+            <dt>
+              Marca e modelo
+            </dt>
+
+            <dd>
+              <%= link_to 'Soforte Giorgia', 'http://gruposoforte.com.br/portfolio-type/giorgia/', target: '_blank' %>
+            </dd>
+
+            <dt>
+              Tempo de uso
+            </dt>
+
+            <dd>
+              3 meses
+            </dd>
+          </dl>
+
+          <p class="price">
+            R$ 400
+          </p>
+        </div>
       </div>
 
-      <div class="panel-body">
-        <p>
-          Sofá de 2 lugares em suede que, como por magia, transforma-se numa cama de casal.
-          Para receber os amigos sem-teto da madrugada.
-        </p>
+      <div class="panel panel-default" id="geladeira">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <%= link_to 'Geladeira frost free', 'http://www.consul.com.br/produto/geladeira-consul-facilite-frost-free-300l-2/', target: '_blank' %>
+          </h3>
+        </div>
 
-        <dl class="dl-horizontal">
-          <dt>
-            Marca
-          </dt>
+        <%= link_to ' ', '#image-modal', class: 'merchandise-image', data: { toggle: 'modal' } %>
 
-          <dd>
-            Sofás max
-          </dd>
+        <div class="panel-body">
+          <p>
+            Geladeira 1 porta frost free. Compacta e espaçosa, não precisa descongelar.
+          </p>
 
-          <dt>
-            Tempo de uso
-          </dt>
+          <dl class="dl-horizontal">
+            <dt>
+              Marca e modelo
+            </dt>
 
-          <dd>
-            3 meses
-          </dd>
-        </dl>
+            <dd>
+              <%= link_to 'Consul Facilite Frost Free 300L', 'http://www.consul.com.br/produto/geladeira-consul-facilite-frost-free-300l-2/', target: '_blank' %>
+            </dd>
 
-        <p class="price">
-          R$ 400
-        </p>
+            <dt>
+              Tempo de uso
+            </dt>
+
+            <dd>
+              5 meses
+            </dd>
+          </dl>
+
+          <p class="price">
+            R$ 600
+          </p>
+        </div>
+      </div>
+
+      <div class="panel panel-default" id="panelas">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <%= link_to 'Jogo de panelas inox', 'https://www.tramontina.com.br/produtos/19566-jogo-de-panelas-5-pcs/', target: '_blank' %>
+          </h3>
+        </div>
+
+        <div class="panel-body">
+          <p>
+            Conjunto com 6 itens em inox, panelas com fundo triplo.
+            Para fazer pratos veganos sofisticados like a boss.
+          </p>
+
+          <dl class="dl-horizontal">
+            <dt>
+              Marca e modelo
+            </dt>
+
+            <dd>
+              <%= link_to 'Tramontina Solar inox', 'https://www.tramontina.com.br/produtos/19566-jogo-de-panelas-5-pcs/', target: '_blank' %>
+            </dd>
+
+            <dt>
+              Tempo de uso
+            </dt>
+
+            <dd>
+              4 meses
+            </dd>
+          </dl>
+
+          <p class="price">
+            R$ 290
+          </p>
+        </div>
+      </div>
+
+      <div class="panel panel-default" id="armario">
+        <div class="panel-heading">
+          <h3 class="panel-title">Armário para microondas</h3>
+        </div>
+
+        <%= link_to ' ', '#image-modal', class: 'merchandise-image', data: { toggle: 'modal' } %>
+
+        <div class="panel-body">
+          <p>
+            Multiuso, com duas portas. Serve para microondas, para guardar itens de
+            cozinha e até como fruteira.
+          </p>
+
+          <dl class="dl-horizontal">
+            <dt>
+              Marca
+            </dt>
+
+            <dd>
+              Sulex
+            </dd>
+
+            <dt>
+              Tempo de uso
+            </dt>
+
+            <dd>
+              3 meses
+            </dd>
+          </dl>
+
+          <p class="price">
+            R$ 100
+          </p>
+        </div>
       </div>
     </div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= link_to 'Geladeira frost free', 'http://www.consul.com.br/produto/geladeira-consul-facilite-frost-free-300l-2/', target: '_blank' %>
-        </h3>
+    <div class="col-sm-6">
+      <div class="panel panel-default" id="mesa">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <%= link_to 'Mesa com 4 cadeiras', 'http://www.pozza.com.br/produtos/pozza', target: '_blank' %>
+          </h3>
+        </div>
+
+        <%= link_to ' ', '#image-modal', class: 'merchandise-image', data: { toggle: 'modal' } %>
+
+        <div class="panel-body">
+          <p>
+            Mesa quadrada pequena (80x80) com 4 cadeiras. Cabe nos apartamentos mais minúsculos.
+          </p>
+
+          <dl class="dl-horizontal">
+            <dt>
+              Marca
+            </dt>
+
+            <dd>
+              <%= link_to 'Pozza', 'http://www.pozza.com.br/produtos/pozza', target: '_blank' %>
+            </dd>
+
+            <dt>
+              Tempo de uso
+            </dt>
+
+            <dd>
+              3 meses
+            </dd>
+          </dl>
+
+          <p class="price">
+            R$ 300
+          </p>
+        </div>
       </div>
 
-      <div class="panel-body">
-        <p>
-          Geladeira 1 porta frost free. Compacta e espaçosa, não precisa descongelar.
-        </p>
+      <div class="panel panel-default" id="fogao">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <%= link_to 'Fogão 4 bocas', 'http://www.esmaltec.com.br/produtos-lar/0/9/5/13', target: '_blank' %>
+          </h3>
+        </div>
 
-        <dl class="dl-horizontal">
-          <dt>
-            Marca e modelo
-          </dt>
+        <%= link_to ' ', '#image-modal', class: 'merchandise-image', data: { toggle: 'modal' } %>
 
-          <dd>
-            <%= link_to 'Consul Facilite Frost Free 300L', 'http://www.consul.com.br/produto/geladeira-consul-facilite-frost-free-300l-2/', target: '_blank' %>
-          </dd>
+        <div class="panel-body">
+          <p>
+            Fogão em inox, já convertido e com mangueira inclusa.
+          </p>
 
-          <dt>
-            Tempo de uso
-          </dt>
+          <dl class="dl-horizontal">
+            <dt>
+              Marca e modelo
+            </dt>
 
-          <dd>
-            5 meses
-          </dd>
-        </dl>
+            <dd>
+              <%= link_to 'Esmaltec Samoa Inox', 'http://www.esmaltec.com.br/produtos-lar/0/9/5/13', target: '_blank' %>
+            </dd>
 
-        <p class="price">
-          R$ 600
-        </p>
-      </div>
-    </div>
+            <dt>
+              Tempo de uso
+            </dt>
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= link_to 'Jogo de panelas inox', 'https://www.tramontina.com.br/produtos/19566-jogo-de-panelas-5-pcs/', target: '_blank' %>
-        </h3>
-      </div>
+            <dd>
+              4 meses
+            </dd>
+          </dl>
 
-      <div class="panel-body">
-        <p>
-          Conjunto com 6 itens em inox, panelas com fundo triplo.
-          Para fazer pratos veganos sofisticados like a boss.
-        </p>
-
-        <dl class="dl-horizontal">
-          <dt>
-            Marca e modelo
-          </dt>
-
-          <dd>
-            <%= link_to 'Tramontina Solar inox', 'https://www.tramontina.com.br/produtos/19566-jogo-de-panelas-5-pcs/', target: '_blank' %>
-          </dd>
-
-          <dt>
-            Tempo de uso
-          </dt>
-
-          <dd>
-            4 meses
-          </dd>
-        </dl>
-
-        <p class="price">
-          R$ 260
-        </p>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Armário para microondas</h3>
+          <p class="price">
+            R$ 300
+          </p>
+        </div>
       </div>
 
-      <div class="panel-body">
-        <p>
-          Multiuso, com duas portas. Serve para microondas, para guardar itens de
-          cozinha e até como fruteira.
-        </p>
+      <div class="panel panel-default" id="ventilador">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <%= link_to 'Ventilador', 'http://www.arno.com.br/#!/produtos/Conforto/ventiladores-39/ventilador-arno-turbo-silencio-maxx-40cm-95', target: '_blank' %>
+          </h3>
+        </div>
 
-        <dl class="dl-horizontal">
-          <dt>
-            Marca
-          </dt>
+        <%= link_to ' ', '#image-modal', class: 'merchandise-image', data: { toggle: 'modal' } %>
 
-          <dd>
-            Sulex
-          </dd>
+        <div class="panel-body">
+          <p>
+            Grande e silencioso, na cor branca, para os calores mais dantescos.
+          </p>
 
-          <dt>
-            Tempo de uso
-          </dt>
+          <dl class="dl-horizontal">
+            <dt>
+              Marca e modelo
+            </dt>
 
-          <dd>
-            3 meses
-          </dd>
-        </dl>
+            <dd>
+              <%= link_to 'Arno Turbo Silêncio 40cm', 'http://www.arno.com.br/#!/produtos/Conforto/ventiladores-39/ventilador-arno-turbo-silencio-maxx-40cm-95', target: '_blank' %>
+            </dd>
 
-        <p class="price">
-          R$ 100
-        </p>
+            <dt>
+              Tempo de uso
+            </dt>
+
+            <dd>
+              2 meses
+            </dd>
+          </dl>
+
+          <p class="price">
+            R$ 120
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="col-sm-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= link_to 'Mesa com 4 cadeiras', 'http://www.pozza.com.br/imagens/produtos/Conjunto_Sabrina.jpg', target: '_blank' %>
-        </h3>
-      </div>
-
-      <div class="panel-body">
-        <p>
-          Mesa quadrada pequena (80x80) com 4 cadeiras. Cabe nos apartamentos mais minúsculos.
-        </p>
-
-        <dl class="dl-horizontal">
-          <dt>
-            Marca
-          </dt>
-
-          <dd>
-            <%= link_to 'Pozza', 'http://www.pozza.com.br/imagens/produtos/Conjunto_Sabrina.jpg', target: '_blank' %>
-          </dd>
-
-          <dt>
-            Tempo de uso
-          </dt>
-
-          <dd>
-            3 meses
-          </dd>
-        </dl>
-
-        <p class="price">
-          R$ 300
-        </p>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= link_to 'Fogão 4 bocas', 'http://www.esmaltec.com.br/produtos-lar/0/9/5/13', target: '_blank' %>
-
-        </h3>
-      </div>
-
-      <div class="panel-body">
-        <p>
-          Fogão em inox, já convertido e com mangueira inclusa.
-        </p>
-
-        <dl class="dl-horizontal">
-          <dt>
-            Marca e modelo
-          </dt>
-
-          <dd>
-            <%= link_to 'Esmaltec Samoa Inox', 'http://www.esmaltec.com.br/produtos-lar/0/9/5/13', target: '_blank' %>
-          </dd>
-
-          <dt>
-            Tempo de uso
-          </dt>
-
-          <dd>
-            4 meses
-          </dd>
-        </dl>
-
-        <p class="price">
-          R$ 300
-        </p>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= link_to 'Ventilador', 'http://www.arno.com.br/#!/produtos/Conforto/ventiladores-39/ventilador-arno-turbo-silencio-maxx-40cm-95', target: '_blank' %>
-        </h3>
-      </div>
-
-      <div class="panel-body">
-        <p>
-          Grande e silencioso, para os calores mais dantescos.
-        </p>
-
-        <dl class="dl-horizontal">
-          <dt>
-            Marca e modelo
-          </dt>
-
-          <dd>
-            <%= link_to 'Arno Turbo Silêncio 40cm', 'http://www.arno.com.br/#!/produtos/Conforto/ventiladores-39/ventilador-arno-turbo-silencio-maxx-40cm-95', target: '_blank' %>
-          </dd>
-
-          <dt>
-            Tempo de uso
-          </dt>
-
-          <dd>
-            2 meses
-          </dd>
-        </dl>
-
-        <p class="price">
-          R$ 120
-        </p>
+  <div class="modal fade" id="image-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <%= image_tag '' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+        </div>
       </div>
     </div>
   </div>

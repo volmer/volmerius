@@ -1,28 +1,53 @@
-.price {
-  font-size: 23px;
-  color: #777;
-}
-
-.panel-title {
-  font-size: 21px;
-  color: #428bca;
-}
-
-.jumbotron {
-  background-color: inherit;
-}
-
-body {
-  font-size: 16px;
-}
-
-.dl-horizontal {
-  dt {
-    width: 130px;
-    text-align: left;
+#sale {
+  .price {
+    font-size: 23px;
+    color: #777;
   }
 
-  dd {
-    margin-left: 140px;
+  .panel-title {
+    font-size: 21px;
+    color: #428bca;
+  }
+
+  .jumbotron {
+    margin-top: 20px;
+    background-color: #eee;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .dl-horizontal {
+    dt {
+      width: 130px;
+      text-align: left;
+    }
+
+    dd {
+      margin-left: 140px;
+    }
+  }
+
+
+  .merchandise-image {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.8;
+    height: 200px;
+    transition: all .5s ease-in-out;
+    display: block;
+  }
+
+  .merchandise-image:hover {
+    opacity: 1;
+  }
+
+  .modal img {
+    max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 }

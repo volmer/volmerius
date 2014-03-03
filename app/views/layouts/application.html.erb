@@ -2,7 +2,7 @@
 <html lang="<%= I18n.locale %>">
   <head>
     <title>
-      <%= [content_for(:page_title), 'Volmerius'].reject(&:blank?).join(' · ') %>
+      <%= content_for(:page_title) || 'Volmer Soares' %>
     </title>
 
     <%= stylesheet_link_tag 'application', media: 'all' %>

@@ -1,9 +1,29 @@
-<div class="jumbotron">
-  <h1>
-    Volmerius
-  </h1>
+<div id="home">
+  <div class="row">
+    <div class="col-sm-offset-4 col-sm-8">
+      <h1>
+        Volmer Soares
+      </h1>
+    </div>
+  </div>
 
-  <p>
-    <%= link_to 'Bota-fora do Volmerius', sale_path, class: 'btn btn-primary btn-lg' %>
-  </p>
+  <div class="row">
+    <div class="col-sm-4">
+      <%= image_tag 'volmer.jpg', class: 'img-thumbnail' %>
+    </div>
+
+    <div class="col-sm-8">
+      <p class="lead">
+        Passionate developer. Music lover.
+      </p>
+
+      <ul>
+        <%= link_li 'icon-github', 'GitHub', 'https://github.com/volmer' %>
+        <%= link_li 'icon-lightbulb', 'Rubygems', 'https://rubygems.org/profiles/volmer' %>
+        <%= link_li 'icon-play-circle', 'Soundcloud', 'https://soundcloud.com/volmer' %>
+        <%= link_li 'icon-twitter', 'Twitter', 'https://twitter.com/volmerius' %>
+        <%= link_li 'icon-linkedin-sign', 'Linkedin', 'http://www.linkedin.com/in/volmerius' %>
+      </ul>
+    </div>
+  </div>
 </div>

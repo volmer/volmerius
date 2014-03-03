@@ -9,17 +9,13 @@
 
     <%= csrf_meta_tags %>
 
-    <%= render 'layouts/head' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <%= favicon_link_tag %>
   </head>
 
   <body>
     <div id="content-wrapper">
-      <%= render 'layouts/navbar' %>
-
-      <%= render 'layouts/top' %>
-
       <div class='container' id='main-container'>
         <%= render 'layouts/alerts' %>
 
@@ -27,7 +23,7 @@
       </div>
     </div>
 
-    <%= render 'layouts/footer' %>
+    <%#= render 'layouts/footer' %>
 
     <%= javascript_include_tag 'application' %>
   </body>

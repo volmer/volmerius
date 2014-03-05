@@ -34,14 +34,14 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    opacity: 0.8;
+    box-shadow: none;
     height: 200px;
     transition: all .5s ease-in-out;
     display: block;
   }
 
   .merchandise-image:hover {
-    opacity: 1;
+    box-shadow: 0 0 30px #333;
   }
 
   .modal img {

@@ -68,43 +68,6 @@
         </div>
       </div>
 
-      <div class="panel panel-info" id="armario">
-        <div class="panel-heading">
-          <h3 class="panel-title">Armário para microondas</h3>
-        </div>
-
-        <%= link_to ' ', '#image-modal', class: 'merchandise-image', data: { toggle: 'modal', image: asset_path('sale/armario.jpg') } %>
-
-        <div class="panel-body">
-          <p>
-            Multiuso, com duas portas. Serve para microondas, para guardar itens de
-            cozinha e até como fruteira.
-          </p>
-
-          <dl class="dl-horizontal">
-            <dt>
-              Marca
-            </dt>
-
-            <dd>
-              Sulex
-            </dd>
-
-            <dt>
-              Tempo de uso
-            </dt>
-
-            <dd>
-              3 meses
-            </dd>
-          </dl>
-
-          <p class="price">
-            R$ 100
-          </p>
-        </div>
-      </div>
-
       <div class="panel panel-info" id="panelas">
         <div class="panel-heading">
           <h3 class="panel-title">
@@ -138,6 +101,47 @@
 
           <p class="price">
             R$ 290
+          </p>
+        </div>
+      </div>
+
+      <div class="panel panel-info" id="armario">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Armário para microondas
+
+            <div class="label label-default">Reservado</div>
+          </h3>
+        </div>
+
+        <%= link_to ' ', '#image-modal', class: 'merchandise-image', data: { toggle: 'modal', image: asset_path('sale/armario.jpg') } %>
+
+        <div class="panel-body">
+          <p>
+            Multiuso, com duas portas. Serve para microondas, para guardar itens de
+            cozinha e até como fruteira.
+          </p>
+
+          <dl class="dl-horizontal">
+            <dt>
+              Marca
+            </dt>
+
+            <dd>
+              Sulex
+            </dd>
+
+            <dt>
+              Tempo de uso
+            </dt>
+
+            <dd>
+              3 meses
+            </dd>
+          </dl>
+
+          <p class="price">
+            R$ 100
           </p>
         </div>
       </div>
@@ -226,6 +230,7 @@
         <div class="panel-heading">
           <h3 class="panel-title">
             <%= link_to 'Ventilador 40 cm', 'http://www.arno.com.br/#!/produtos/Conforto/ventiladores-39/ventilador-arno-turbo-silencio-maxx-40cm-95', target: '_blank' %>
+            <div class="label label-default">Reservado</div>
           </h3>
         </div>
 

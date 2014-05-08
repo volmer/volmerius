@@ -1,2 +1,11 @@
+# Site settings
 name: Volmerius
-markdown: redcarpet
+title: Volmer Soares
+email: volmerius@gmail.com
+description: 'Passionate developer. Music lover.'
+baseurl: ''
+url: 'http://volmerius.com'
+
+# Build settings
+markdown: kramdown
+permalinks: pretty

@@ -9,3 +9,5 @@ url: 'http://volmerius.com'
 # Build settings
 markdown: kramdown
 permalinks: pretty
+gems:
+  - jekyll-sitemap

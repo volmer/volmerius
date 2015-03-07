@@ -1,4 +1,15 @@
-@import url(http://fonts.googleapis.com/css?family=Inder|Quattrocento);
+---
+---
+
+@import url("http://fonts.googleapis.com/css?family=Inder|Quattrocento");
+
+$bg-color: #fff;
+$body-color: #333;
+$paragraph-color: #666;
+$link-color: #d11919;
+$link-color-hover: #921212;
+$heading-shadow-color: #aaa;
+$image-border-color: #ddd;
 
 * {
   margin: 0;
@@ -11,9 +22,9 @@ html, body {
 }
 
 body {
-  background-color: #fff;
+  background-color: $bg-color;
   font-family: 'Inder', sans-serif;
-  color: #333;
+  color: $body-color;
   font-size: 16px;
   line-height: 1.4;
 }
@@ -21,39 +32,39 @@ body {
 .container {
   max-width: 600px;
   margin: 20px auto;
-}
 
-.container:before,
-.container:after {
-  content:"";
-  display:table;
-}
-.container:after {
-  clear:both;
+  &:before, &:after {
+    content: "";
+    display: table;
+  }
+
+  &:after {
+    clear:both;
+  }
 }
 
 h1 {
   font-size: 36px;
   margin: 20px 0 10px 240px;
   font-weight: 500;
-  text-shadow: 1px 0 2px #aaa;
+  text-shadow: 1px 0 2px $heading-shadow-color;
 }
 
 p {
   font-family: 'Quattrocento', serif;
-  color: #666;
+  color: $paragraph-color;
   font-size: 21px;
   margin-bottom: 20px;
   font-weight: 200;
 }
 
 a, a:visited {
-  color: #d11919;
+  color: $link-color;
   text-decoration: none;
-}
 
-a:hover {
-  color: #921212;
+  &:hover {
+    color: $link-color-hover;
+  }
 }
 
 img {
@@ -65,8 +76,8 @@ img {
   float: left;
   padding: 4px;
   line-height: 1.42857143;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: $bg-color;
+  border: 1px solid $image-border-color;
   transition: all .2s ease-in-out;
   max-width: 100%;
   height: auto;

@@ -1,7 +1,6 @@
 # Site settings
 name: Volmerius
 title: Volmer
-email: volmerius@gmail.com
 description: "Volmer's website. Passionate developer, music lover. Here you can find out how to find me around."
 baseurl: ''
 url: 'http://volmerius.com'
@@ -9,5 +8,5 @@ url: 'http://volmerius.com'
 # Build settings
 markdown: kramdown
 permalinks: pretty
-gems:
+plugins:
   - jekyll-sitemap

@@ -3,13 +3,13 @@
 
 @import url("https://fonts.googleapis.com/css?family=Inder|Quattrocento");
 
-$bg-color: #fff;
-$body-color: #333;
-$paragraph-color: #666;
+$bg-color: #000;
+$body-color: #ddd;
+$paragraph-color: #999;
 $link-color: #d11919;
 $link-color-hover: #921212;
-$heading-shadow-color: #aaa;
-$image-border-color: #ddd;
+$heading-shadow-color: #333;
+$image-border-color: #333;
 
 * {
   margin: 0;
@@ -26,26 +26,14 @@ body {
   font-family: 'Inder', sans-serif;
   color: $body-color;
   font-size: 16px;
-  line-height: 1.4;
-}
-
-.container {
-  max-width: 650px;
-  margin: 20px auto;
-
-  &:before, &:after {
-    content: "";
-    display: table;
-  }
-
-  &:after {
-    clear:both;
-  }
+  line-height: 1.6;
+  text-align: center;
+  padding: 20px;
 }
 
 h1 {
   font-size: 28px;
-  margin: 20px 0 10px 240px;
+  margin: 0 0 20px;
   font-weight: 500;
   text-shadow: 1px 0 2px $heading-shadow-color;
 }
@@ -54,8 +42,10 @@ p {
   font-family: 'Quattrocento', serif;
   color: $paragraph-color;
   font-size: 18px;
-  margin-bottom: 20px;
+  margin: 0 0 20px;
   font-weight: 200;
+  max-width: 650px;
+  display: inline-block;
 }
 
 a, a:visited {
@@ -70,51 +60,16 @@ a, a:visited {
 img {
   width: 200px;
   display: block;
-  margin: 0 auto;
   border-radius: 50%;
-  margin-bottom: 20px;
-  float: left;
+  margin: 0 auto 20px;
   padding: 4px;
   line-height: 1.42857143;
   background-color: $bg-color;
   border: 1px solid $image-border-color;
   transition: all .2s ease-in-out;
-  max-width: 100%;
-  height: auto;
-}
-
-.col {
-  float: left;
-  margin-left: 40px;
 }
 
 ul {
-  padding-left: 0;
   list-style: none;
   font-size: 16px;
-}
-
-/* Overrides for smaller screens. */
-@media (max-width: 767px) {
-  .container {
-    text-align: center;
-  }
-
-  h1 {
-    margin: 0 0 20px;
-  }
-
-  img {
-    margin: 0 auto 20px;
-    float: none;
-  }
-
-  p {
-    font-size: 18px;
-  }
-
-  .col {
-    float: none;
-    margin: 0 auto;
-  }
 }

@@ -1,7 +1,8 @@
 ---
+tags: post
 layout: post
 title: Vai Ter Copa?
-date: Mon, 09 Jun 2014 12:10:08 -0400
+date: 2014-06-09 12:10:08 -04:00
 ---
 <p>Em 2010 escrevi sobre a Copa do Mundo que acontecia na África do Sul, no intuito de denunciar aos brasileiros todo o esquema de politicagem, segregação e injustiças que circunda o evento da Fifa. Na época fiz panfletos com meu texto que distribuí em alguns eventos em Brasília, principalmente na UnB. Lembro-me que a maior parte das pessoas ao se depararem com o que eu expunha sobre a Copa zombava, fazia piada e me via como um &amp;ldquo;anti-futebol&amp;rdquo;, &amp;ldquo;anti-diversão&amp;rdquo;, &amp;ldquo;anti-qualquer-coisa&amp;rdquo;. Quatro anos depois, quando vejo todos aqueles fantasmas sobre os quais escrevi baterem à porta e se estabelecerem no Brasil, percebo que aquele panfleto se torna horrendamente atual. Os mesmos crimes, desperdícios, mentiras e despejos. Ouso acreditar que muitos do que zombavam do que eu disse sobre a África do Sul estão por aí protestando &amp;ldquo;Não vai ter Copa!&amp;rdquo;. Mas vai sim. Porque enquanto povo brasileiro somos manipuláveis, insensíveis, passivos e esquecíveis.</p>
         <p>Segue o texto original de 2010:</p>

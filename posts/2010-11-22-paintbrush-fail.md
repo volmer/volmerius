@@ -1,12 +1,13 @@
 ---
+tags: post
 layout: post
 title: Paintbrush Fail
-date: Mon, 22 Nov 2010 14:00:00 -0500
+date: 2010-11-22 14:00:00 -05:00
 ---
 
 <p>
           <span>A imprensa está se atrapalhando pra divulgar o RHCP no Rock in Rio, uma vez que não existem muitas fotos disponíveis da nova formação da banda sem o John 
-            <span class="il">Frusciante</span>. O cúmulo foi o que o jornal Extra fez: pegaram uma foto antiga (da época do 
+            <span class="il">Frusciante</span>. O cúmulo foi o que o jornal Extra fez: pegaram uma foto antiga (da época do
             <em>By The Way</em>) e editaram no paint, tirando o rosto do John e enfiando a cara do Josh. Confiram:
           </span>
         </p>

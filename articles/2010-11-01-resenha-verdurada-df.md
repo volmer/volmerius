@@ -1,6 +1,6 @@
 ---
-tags: post
-layout: post
+tags: pt
+layout: article
 title: 'Resenha: Verdurada DF'
 date: 2010-11-01 22:00:43 -04:00
 ---
@@ -19,8 +19,10 @@ estilo. Convites feitos, o esquema foi pegar carona rumo ao clássico Círculo
 Operário do Cruzeiro para conferir a primeira edição do Verdurada DF.
 E que tenha sido a primeira de muitas, pois o lance foi do caralho!
 
-"Quebre as regras do esquema, batalhe por si só, queime a bandeira e mate o Poder!"
-- Tirei Zero
+> Quebre as regras do esquema, batalhe por si só, queime a bandeira e mate o
+> Poder!
+>
+> *- Tirei Zero*
 
 O evento rolou no domingo, na cabalística data de 31 de outubro, halloween e
 ironicamente o segundo turno das eleições. Trocar o sufrágio pelo Verdurada foi
@@ -39,7 +41,6 @@ Abrindo o evento rolou a banda Gulag (DF), com o bom e velho hardcore ("música
 de prisioneiro"). Show impecável e bem apreciado, mesmo que no momento somente
 uma pequena parcela do público que acabaria compondo a noite estivesse presente.
 
-
 Em seguida foi a vez da curitibana Black Sea, mandando seu post-rock muito bem
 feito, prato cheio para os apreciadores do estilo.
 
@@ -57,7 +58,6 @@ força total, acendeu a rodada de mosh da noite, ao som do metalcore violento,
 coisa linda de Deus. Apenas soou estranho o anúncio feito pela banda de premiar
 quem mandasse melhor no mosh com uma bermuda, motivação concorrente sem sentido.
 Mas tudo ficou beleza quando somente jogaram a peça pra galera ao final do show.
-
 
 A sequência de bandas deu lugar à palestra/debate sobre Mobilidade Urbana,
 promovida pelo Movimento Passe Livre e Bicicletade-DF. O papo foi um dos
@@ -82,7 +82,6 @@ palco também foram mandadas idéias, com um apelo à maior união da cena
 underground do Distrito Federal e ao prestígio das boas iniciativas, e também um
 protesto ao fascismo hardline que manchou a história sxe nos tempos passados.
 
-
 O pique old school continuou a todo vapor com a sequência comandada pela Nossa
 Escolha (DF). O show foi introduzido ao som de The Who, deixando todo o público
 em ponto de bala. Daí pra cair na roda com o hardcore no talo foi literalmente
@@ -96,15 +95,17 @@ melódico, politizado e consciente. A banda, bem como as demais de outros
 estados, fizeram bonito no evento, vindo de longe para somar em grande estilo às
 bandas locais.
 
-"Rule of the streets #1: Fuck the police!
-Rule of the streets #2: Fuck the police!
-Rule of the streets #3: Fuck the police!"
-- xEdge With Dreadsx
+> Rule of the streets #1: Fuck the police!
+> Rule of the streets #2: Fuck the police!
+> Rule of the streets #3: Fuck the police!
+>
+> *- xEdge With Dreadsx*
 
 Ao final das apresentações foi a hora do jantar vegano, servido a todos os
 presentes. O prato da noite foi um delicioso strogonoff com arroz (molho
 maravilhoso aliás). A distribuição das porções provou a competência e
-organização do Coletivo, que proveu o público maior que o esperado em um tempo incrível. Vale ressaltar também a campanha prévia para a galera trazer seus
+organização do Coletivo, que proveu o público maior que o esperado em um tempo
+incrível. Vale ressaltar também a campanha prévia para a galera trazer seus
 próprios pratos e talheres, evitando o uso de materiais descartáveis. Outro
 ponto interessante foi a promoção da coleta seletiva do lixo. Nesse sentido só
 faltou uma melhor sinalização das lixeiras específicas e também talvez
@@ -116,17 +117,17 @@ Para embalar a galera no fechamento do evento rolou o baile hip hop com xEdge
 With Dreadsx (EUA), que mandou muito bem. É o estilo de vida libertário livre de
 drogas indo além das fronteiras do hardcore.
 
-"O orgulho da minha convicção;
-O orgulho de usar um 'x' na mão"
-
-- xLost in Hatex
+> O orgulho da minha convicção. O orgulho de usar um "x" na mão.
+>
+> *- xLost in Hatex*
 
 O Verdurada-DF surpreendeu a todos pelos resultados extremamente positivos.
-Conseguiu reunir um público extremamente plural, &amp;ldquo;do anarcopunk ao straightedge cristão&amp;rdquo;, todos estavam lá. As seis horas e meia de
-evento que presenciei (até ter que vazar pra não perder o último baú) foram
-marcadas por um clima de amizade, informação e diversão, sem qualquer ocorrência
-violenta ou chateações. O Coletivo Vegano, promotor do evento, está de parabéns
-pela iniciativa, dedicação e organização.
+Conseguiu reunir um público extremamente plural, "do anarcopunk ao straightedge
+cristão", todos estavam lá. As seis horas e meia de evento que presenciei (até
+ter que vazar pra não perder o último baú) foram marcadas por um clima de
+amizade, informação e diversão, sem qualquer ocorrência violenta ou chateações.
+O Coletivo Vegano, promotor do evento, está de parabéns pela iniciativa,
+dedicação e organização.
 
 O Verdurada tem de tudo para ser ponto imperdível no calendário de eventos do
 Distrito Federal, juntamente com os maiores festivais da cidade. Vamos todos

@@ -5,15 +5,20 @@
   "description": "Volmer's website. Passionate developer, music lover. Here you can find out how to find me around.",
   "author": "Volmer Campos Soares",
   "homepage": "https://volmerius.com",
-  "keywords": ["Volmer", "Volmerius", "Volmer Campos Soares", "Volmer Soares"],
+  "scripts": {
+    "build": "sass scss:css && eleventy",
+    "serve": "rm -rf css && sass scss:css --watch & eleventy --serve"
+  },
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
-    "eleventy-plugin-sass": "^1.0.0",
-    "eslint": "^7.0.0",
+    "@fortawesome/fontawesome-free": "^5.13.1",
+    "bulma": "^0.9.0",
+    "eslint": "^7.2.0",
     "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-standard": "^4.0.1",
+    "sass": "^1.26.8"
   }
 }

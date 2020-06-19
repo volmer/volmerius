@@ -1,14 +1,16 @@
-const pluginSass = require("eleventy-plugin-sass");
-
 module.exports = function(eleventyConfig) {
+  eleventyConfig.setUseGitIgnore(false);
   eleventyConfig.addPassthroughCopy("CNAME");
-  eleventyConfig.addPlugin(pluginSass);
+  eleventyConfig.addPassthroughCopy({
+    "node_modules/@fortawesome/fontawesome-free/webfonts": "fonts/fontawesome"
+  });
   eleventyConfig.setTemplateFormats([
     "html",
     "md",
     "njk",
     "css",
-    "ico",
-    "jpg"
+    "jpg",
+    "map",
+    "svg"
   ]);
 };

@@ -1,0 +1,5 @@
+{% for article in articles | reverse %}
+  <h4 class="title is-4">
+    <a href="{{ article.url }}">{{ article.data.title }}</a>
+  </h4>
+{% endfor %}

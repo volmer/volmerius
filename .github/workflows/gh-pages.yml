@@ -14,12 +14,14 @@ jobs:
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v1
+        with:
+          node-version: '14'
 
       - name: Install packages
         run: npm ci
 
-      - name: Eleventy
-        run: npx @11ty/eleventy
+      - name: Build
+        run: npm run build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

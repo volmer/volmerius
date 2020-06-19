@@ -1,0 +1,28 @@
+@use '../node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
+@use '../node_modules/@fortawesome/fontawesome-free/scss/solid' with (
+  $fa-font-path: '/fonts/fontawesome'
+);
+@use '../node_modules/@fortawesome/fontawesome-free/scss/brands' with (
+  $fa-font-path: '/fonts/fontawesome'
+);
+
+@use 'colors';
+@use 'fonts';
+
+@use '../node_modules/bulma/bulma' with (
+  $body-size: 20px,
+  $body-line-height: 1.6,
+  $family-sans-serif: fonts.$family-sans-serif,
+  $widescreen-enabled: false,
+  $fullhd-enabled: false,
+  $link: colors.$red,
+  $footer-background-color: colors.$white,
+  $size-1: 2.5rem,
+  $size-2: 2rem,
+  $size-3: 1.5rem,
+  $size-4: 1.4rem
+);
+
+@use 'base' with(
+  $border: bulma.$border
+);

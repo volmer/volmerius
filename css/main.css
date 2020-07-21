@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Lato");
 /*!
- * Font Awesome Free 5.13.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 5.14.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 .fa,
@@ -547,11 +547,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-bacteria:before {
-  content: "陵";
+  content: "";
 }
 
 .fa-bacterium:before {
-  content: "讀";
+  content: "";
 }
 
 .fa-bahai:before {
@@ -807,7 +807,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-box-tissue:before {
-  content: "拏";
+  content: "";
 }
 
 .fa-boxes:before {
@@ -1575,7 +1575,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-dailymotion:before {
-  content: "勒";
+  content: "";
 }
 
 .fa-dashcube:before {
@@ -1591,7 +1591,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-deezer:before {
-  content: "亮";
+  content: "";
 }
 
 .fa-delicious:before {
@@ -1839,7 +1839,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-edge-legacy:before {
-  content: "兩";
+  content: "";
 }
 
 .fa-edit:before {
@@ -2015,7 +2015,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-faucet:before {
-  content: "串";
+  content: "";
 }
 
 .fa-fax:before {
@@ -2179,7 +2179,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-firefox-browser:before {
-  content: "龜";
+  content: "";
 }
 
 .fa-first-aid:before {
@@ -2499,7 +2499,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-google-pay:before {
-  content: "凉";
+  content: "";
 }
 
 .fa-google-play:before {
@@ -2671,7 +2671,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hand-holding-medical:before {
-  content: "樂";
+  content: "";
 }
 
 .fa-hand-holding-usd:before {
@@ -2727,7 +2727,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hand-sparkles:before {
-  content: "諾";
+  content: "";
 }
 
 .fa-hand-spock:before {
@@ -2743,7 +2743,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hands-wash:before {
-  content: "丹";
+  content: "";
 }
 
 .fa-handshake:before {
@@ -2751,11 +2751,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-handshake-alt-slash:before {
-  content: "寧";
+  content: "";
 }
 
 .fa-handshake-slash:before {
-  content: "怒";
+  content: "";
 }
 
 .fa-hanukiah:before {
@@ -2787,19 +2787,19 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-head-side-cough:before {
-  content: "率";
+  content: "";
 }
 
 .fa-head-side-cough-slash:before {
-  content: "異";
+  content: "";
 }
 
 .fa-head-side-mask:before {
-  content: "北";
+  content: "";
 }
 
 .fa-head-side-virus:before {
-  content: "磻";
+  content: "";
 }
 
 .fa-heading:before {
@@ -2939,7 +2939,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-house-user:before {
-  content: "便";
+  content: "";
 }
 
 .fa-houzz:before {
@@ -2987,7 +2987,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-ideal:before {
-  content: "邏";
+  content: "";
 }
 
 .fa-igloo:before {
@@ -3035,7 +3035,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-instagram-square:before {
-  content: "凌";
+  content: "";
 }
 
 .fa-intercom:before {
@@ -3191,7 +3191,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-laptop-house:before {
-  content: "復";
+  content: "";
 }
 
 .fa-laptop-medical:before {
@@ -3355,7 +3355,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-lungs-virus:before {
-  content: "不";
+  content: "";
 }
 
 .fa-lyft:before {
@@ -3527,7 +3527,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-microblog:before {
-  content: "駱";
+  content: "";
 }
 
 .fa-microchip:before {
@@ -3583,7 +3583,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-mixer:before {
-  content: "稜";
+  content: "";
 }
 
 .fa-mizuni:before {
@@ -3903,7 +3903,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-people-arrows:before {
-  content: "泌";
+  content: "";
 }
 
 .fa-people-carry:before {
@@ -3991,7 +3991,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-pied-piper-square:before {
-  content: "爛";
+  content: "";
 }
 
 .fa-piggy-bank:before {
@@ -4035,7 +4035,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-plane-slash:before {
-  content: "數";
+  content: "";
 }
 
 .fa-play:before {
@@ -4139,11 +4139,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-pump-medical:before {
-  content: "索";
+  content: "";
 }
 
 .fa-pump-soap:before {
-  content: "參";
+  content: "";
 }
 
 .fa-pushed:before {
@@ -4399,7 +4399,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-rust:before {
-  content: "梁";
+  content: "";
 }
 
 .fa-sad-cry:before {
@@ -4531,7 +4531,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-shield-virus:before {
-  content: "塞";
+  content: "";
 }
 
 .fa-ship:before {
@@ -4551,7 +4551,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-shopify:before {
-  content: "綾";
+  content: "";
 }
 
 .fa-shopping-bag:before {
@@ -4611,7 +4611,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-sink:before {
-  content: "省";
+  content: "";
 }
 
 .fa-sistrix:before {
@@ -4739,7 +4739,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-soap:before {
-  content: "葉";
+  content: "";
 }
 
 .fa-socks:before {
@@ -4963,7 +4963,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-stopwatch-20:before {
-  content: "說";
+  content: "";
 }
 
 .fa-store:before {
@@ -4975,11 +4975,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-store-alt-slash:before {
-  content: "殺";
+  content: "";
 }
 
 .fa-store-slash:before {
-  content: "辰";
+  content: "";
 }
 
 .fa-strava:before {
@@ -5263,7 +5263,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-tiktok:before {
-  content: "糧";
+  content: "";
 }
 
 .fa-times:before {
@@ -5303,7 +5303,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-toilet-paper-slash:before {
-  content: "沈";
+  content: "";
 }
 
 .fa-toolbox:before {
@@ -5343,7 +5343,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-trailer:before {
-  content: "論";
+  content: "";
 }
 
 .fa-train:before {
@@ -5491,7 +5491,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-unity:before {
-  content: "雷";
+  content: "";
 }
 
 .fa-universal-access:before {
@@ -5515,7 +5515,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-unsplash:before {
-  content: "良";
+  content: "";
 }
 
 .fa-untappd:before {
@@ -5639,7 +5639,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-users-slash:before {
-  content: "拾";
+  content: "";
 }
 
 .fa-usps:before {
@@ -5731,15 +5731,15 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-virus:before {
-  content: "若";
+  content: "";
 }
 
 .fa-virus-slash:before {
-  content: "掠";
+  content: "";
 }
 
 .fa-viruses:before {
-  content: "略";
+  content: "";
 }
 
 .fa-vk:before {
@@ -6023,7 +6023,7 @@ readers do not read off random characters that represent icons */
 }
 
 /*!
- * Font Awesome Free 5.13.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 5.14.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 @font-face {
@@ -6041,7 +6041,7 @@ readers do not read off random characters that represent icons */
 }
 
 /*!
- * Font Awesome Free 5.13.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 5.14.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 @font-face {

@@ -11,7 +11,9 @@ permalink: "/{{page.fileSlug}}/"
   </p>
 
   {% if image %}
-    <p><img class="article-image" src="/images/articles/{{ image }}"></p>
+    <figure class="article-image">
+      <img src="/images/articles/{{ image }}">
+    </figure>
   {% endif %}
 
   {{ content | safe }}

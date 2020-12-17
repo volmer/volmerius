@@ -17,12 +17,27 @@
   $fullhd-enabled: false,
   $link: colors.$red,
   $footer-background-color: colors.$white,
-  $size-1: 2.2rem,
-  $size-2: 1.8rem,
-  $size-3: 1.5rem,
-  $size-4: 1.4rem
+  $size-1: 1.8rem,
+  $size-2: 1.6rem,
+  $size-3: 1.4rem,
+  $size-4: 1.3rem,
+  $size-5: 1.2rem
 );
 
-@use 'base' with(
+@use 'base' with (
   $border: bulma.$border
 );
+
+.content figure.article-image {
+  margin-left: 0;
+  margin-right: 0;
+
+  @include bulma.until(bulma.$desktop) {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+  }
+
+  img {
+    width: 100%;
+  }
+}

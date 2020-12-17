@@ -3,6 +3,7 @@ tags: pt
 layout: article
 title: 'Resenha: Verdurada DF'
 date: 2010-11-01 22:00:43 -04:00
+image: verdurada.jpg
 ---
 
 Confesso que me despi totalmente de expectativas a respeito da edição DF do

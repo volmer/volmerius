@@ -6390,7 +6390,7 @@ th:not([align]) {
 
 html {
   background-color: white;
-  font-size: 20px;
+  font-size: 18px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   min-width: 300px;
@@ -8622,10 +8622,10 @@ a.tag:hover {
   margin-top: -1.25rem;
 }
 .title.is-1 {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
 }
 .title.is-2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 .title.is-3 {
   font-size: 1.5rem;
@@ -8657,10 +8657,10 @@ a.tag:hover {
   margin-top: -1.25rem;
 }
 .subtitle.is-1 {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
 }
 .subtitle.is-2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 .subtitle.is-3 {
   font-size: 1.5rem;
@@ -14167,11 +14167,11 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 }
 
 .is-size-1 {
-  font-size: 2.5rem !important;
+  font-size: 2.2rem !important;
 }
 
 .is-size-2 {
-  font-size: 2rem !important;
+  font-size: 1.8rem !important;
 }
 
 .is-size-3 {
@@ -14196,11 +14196,11 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 
 @media screen and (max-width: 768px) {
   .is-size-1-mobile {
-    font-size: 2.5rem !important;
+    font-size: 2.2rem !important;
   }
 
   .is-size-2-mobile {
-    font-size: 2rem !important;
+    font-size: 1.8rem !important;
   }
 
   .is-size-3-mobile {
@@ -14225,11 +14225,11 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 }
 @media screen and (min-width: 769px), print {
   .is-size-1-tablet {
-    font-size: 2.5rem !important;
+    font-size: 2.2rem !important;
   }
 
   .is-size-2-tablet {
-    font-size: 2rem !important;
+    font-size: 1.8rem !important;
   }
 
   .is-size-3-tablet {
@@ -14254,11 +14254,11 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 }
 @media screen and (max-width: 1023px) {
   .is-size-1-touch {
-    font-size: 2.5rem !important;
+    font-size: 2.2rem !important;
   }
 
   .is-size-2-touch {
-    font-size: 2rem !important;
+    font-size: 1.8rem !important;
   }
 
   .is-size-3-touch {
@@ -14283,11 +14283,11 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 }
 @media screen and (min-width: 1024px) {
   .is-size-1-desktop {
-    font-size: 2.5rem !important;
+    font-size: 2.2rem !important;
   }
 
   .is-size-2-desktop {
-    font-size: 2rem !important;
+    font-size: 1.8rem !important;
   }
 
   .is-size-3-desktop {

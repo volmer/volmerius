@@ -4,6 +4,7 @@ layout: article
 title: 'Jovens protestam no interior da Bahia e são ameaçados por grupo maçônico'
 date: 2009-09-10 11:51:24 -04:00
 image: protesto.jpg
+image_alt: 'Protestantes seguram cartazes próximo ao desfile de 7 de Setembro'
 ---
 
 Venho relatar os acontecimentos desta última segunda-feira, quando em mais um

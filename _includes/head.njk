@@ -4,6 +4,8 @@
 <meta name="description" content="{{ page.excerpt or pkg.description }}">
 <meta name="author" content="{{ pkg.author }}">
 
+<meta property="og:image" content="{{ pkg.homepage }}/images/{{ image or 'volmer.jpg' }}" />
+
 <link rel="preload" as="style" href="/css/main.css" onload="this.onload=null;this.rel='stylesheet'">
 
 <link href="/images/volmer.svg" rel="icon" type="image/svg+xml" sizes="any">

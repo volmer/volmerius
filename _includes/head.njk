@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ title }}</title>
-<meta name="description" content="{{ pkg.description }}">
+<meta name="description" content="{{ page.excerpt or pkg.description }}">
 <meta name="author" content="{{ pkg.author }}">
 
 <link rel="preload" as="style" href="/css/main.css" onload="this.onload=null;this.rel='stylesheet'">

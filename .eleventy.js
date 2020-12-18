@@ -19,4 +19,11 @@ module.exports = function (eleventyConfig) {
     'map',
     'svg'
   ])
+  eleventyConfig.setFrontMatterParsingOptions({
+    excerpt: function (file, options) {
+      if (file.data.layout === 'article') {
+        file.excerpt = file.content.split('\n\n')[0]
+      }
+    }
+  })
 }

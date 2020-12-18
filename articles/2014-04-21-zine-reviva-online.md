@@ -3,6 +3,8 @@ tags: pt
 layout: article
 title: Zine Reviva Online
 date: 2014-04-21 17:56:41 -04:00
+image: articles/reviva.jpg
+image_alt: 'Zine Cultural Reviva Correntina-BA, escrito à mão na capa do zine'
 ---
 
 O [Reviva](https://reviva.radicaos.com) foi o primeiro zine de Correntina. Isso

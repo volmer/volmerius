@@ -6,7 +6,7 @@
   "author": "Volmer Campos Soares",
   "homepage": "https://volmerius.com",
   "scripts": {
-    "build": "eslint . && sass scss:css && eleventy",
+    "build": "eslint . && sass scss:css --style=compressed && eleventy",
     "serve": "rm -rf css && eslint . && sass scss:css --watch & eleventy --serve"
   },
   "devDependencies": {

@@ -5,6 +5,9 @@
   "description": "Volmer's website. Passionate developer, music lover. Here you can find out how to find me around.",
   "author": "Volmer Campos Soares",
   "homepage": "https://volmerius.com",
+  "engines": {
+    "node": "16.5.0"
+  },
   "scripts": {
     "build": "eslint . && sass scss:css --style=compressed && eleventy",
     "serve": "rm -rf css && eslint . && sass scss:css --watch & eleventy --serve"

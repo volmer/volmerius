@@ -6,7 +6,7 @@
   "author": "Volmer Campos Soares",
   "homepage": "https://volmerius.com",
   "engines": {
-    "node": "16.5.0"
+    "node": "16.10.0"
   },
   "scripts": {
     "build": "eslint . && sass scss:css --style=compressed && eleventy",

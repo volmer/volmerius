@@ -1,6 +1,6 @@
 ---
 layout: base
-title: Volmer Campos Soares
+title: Volmerius
 eleventyExcludeFromCollections: true
 ---
 
@@ -15,15 +15,7 @@ eleventyExcludeFromCollections: true
 
   <div class="column">
     <div class="content">
-      <p>
-        Hello, internet! My name is Volmer. I play music, write stuff on occasion
-        and do software development for a living. Currently enjoying life in
-        Montreal, Canada.
-      </p>
-
-      <h2 class="title is-3">I wrote about...</h2>
-
-      {% set articles = collections.en %}
+      {% set articles = collections.all %}
       {% include "articles.njk" %}
     </div>
   </div>

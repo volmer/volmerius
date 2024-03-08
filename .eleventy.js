@@ -11,6 +11,7 @@ module.exports = function (eleventyConfig) {
     'css',
     'jpg',
     'map',
+    'ico',
     'svg'
   ])
   eleventyConfig.setFrontMatterParsingOptions({

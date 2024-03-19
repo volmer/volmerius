@@ -1,4 +1,12 @@
+const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight')
+require('prismjs/plugins/custom-class/prism-custom-class')
+
 module.exports = function (eleventyConfig) {
+  eleventyConfig.addPlugin(syntaxHighlight, {
+    init: function ({ Prism }) {
+      Prism.plugins.customClass.prefix('prism--')
+    }
+  })
   eleventyConfig.setUseGitIgnore(false)
   eleventyConfig.addPassthroughCopy('CNAME')
   eleventyConfig.addPassthroughCopy({
@@ -10,13 +18,13 @@ module.exports = function (eleventyConfig) {
     'njk',
     'css',
     'jpg',
+    'png',
     'map',
-    'ico',
     'svg'
   ])
   eleventyConfig.setFrontMatterParsingOptions({
     excerpt: function (file) {
-      if (file.data.layout === 'article') {
+      if (file.data.layout === 'essay' || file.data.layout === 'rails-page') {
         file.excerpt = file.content.split('\n\n')[0]
       }
     }

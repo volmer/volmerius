@@ -1,0 +1,96 @@
+---
+layout: base
+title: Volmer's Rails Guide
+eleventyExcludeFromCollections: true
+---
+
+<h1 class="title is-1">Volmer's Rails Guide</h1>
+
+<div class="content is-large">
+  <ol>
+    {% for page in collections.rails %}
+      {% if page.data.tags.length == 1 %}
+        <li>
+          <a href="{{ page.url }}">{{ page.data.title }}</a>
+
+          {% if page.data.subcollection %}
+            <ul>
+              {% for subpage in collections[page.data.subcollection] %}
+                <li>
+                  <a href="{{ subpage.url }}">{{ subpage.data.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+</div>
+
+<div class="content">
+  <h2 class="title is-2">About this guide</h2>
+
+  <p>
+    This is a project to define a sustainable architecture for software
+    development in Ruby on Rails. It is a collection of ideas, lessons, and
+    best practices that allows Rails apps to be easy to change and acommodate
+    new features.
+  </p>
+
+  <p>
+    In fast growing teams, Rails apps need to be maintained and extended while
+    running flawlessly to best serve the business and its customers. Defining
+    an architecture that allows sustaining constant modifications is a software
+    design challenge faced by engineering teams everyday.
+  </p>
+
+  <p>
+    From that challenge comes useful practices and patterns proven to help
+    escalate software development for the long term. This guide is an initiative
+    intended to formalize a few of these common practices, particularly around
+    input validation, use case coordination, and data modelling/persistance.
+  </p>
+
+  <p>
+    This guide is not the definitive architecture for Rails. It is simply a good
+    starting point. The proposed layers are intended to be used as specified, or
+    as inspiration to help developers design soluations for their own needs. The
+    goal of this project is not to be perfect; rather, it recommends practices
+    with thoughtful trade-offs that can pay for themselves in the long run.
+  </p>
+
+  <p>
+    I hope the ideas documented in this Guide can help you and your team deliver
+    great products built with Rails, in a sustainable, happy, and fun journey.
+  </p>
+</div>
+
+<div class="columns is-mobile">
+  <div class="column is-half-mobile is-one-quarter-tablet">
+    <div class="content has-text-centered">
+      <figure class="image">
+        <img src="/images/volmer.jpg" class="is-rounded" alt="Volmer contemplating the infinity of the universe" >
+      </figure>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="content">
+      <p class="title">Volmer Campos Soares</p>
+      <p class="subtitle">The Author</p>
+
+      <p>
+        Volmer has been doing Ruby for the last 15 years. He is
+        Brazilian-Canadian, currently enjoying life in Montreal.
+      </p>
+
+      <p>
+        Volmer is passionate about designing great products that improve
+        people's lives. When not coding, he spends his time with other passions
+        such as nerding out about coffee, playing Brazilian music, and
+        travelling.
+      </p>
+    </div>
+  </div>
+</div>

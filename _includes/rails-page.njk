@@ -1,0 +1,30 @@
+---
+layout: base
+permalink: "/rails/{{ title | slug }}/"
+---
+
+<h1 class="title is-1">{{ title }}</h1>
+
+<div class="content rails-page-content">{{ content | safe }}</div>
+
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+  {% for _p in collections.rails %}
+    {% if _p.url == page.url %}
+      {% set previous = collections.rails[loop.index0 - 1 ] %}
+
+      {% if previous %}
+        <a class="pagination-previous" href="{{ previous.url }}">Previous: {{ previous.data.title }}</a>
+      {% else %}
+        <a class="pagination-previous" href="/rails">Index</a>
+      {% endif %}
+
+      {% set next = collections.rails[loop.index0 + 1 ] %}
+
+      {% if next %}
+        <a class="pagination-next" href="{{ next.url }}">Next: {{ next.data.title }}</a>
+      {% else %}
+        <a class="pagination-next" href="/rails">Index</a>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</nav>

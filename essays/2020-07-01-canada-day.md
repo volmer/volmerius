@@ -1,6 +1,8 @@
 ---
-tags: en
-layout: article
+tags:
+  - essay
+  - en
+layout: essay
 title: Canada Day
 date: 2020-07-01 22:00:00 -05:00
 ---

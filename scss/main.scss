@@ -10,21 +10,39 @@
 @use 'fonts';
 
 @use '../node_modules/bulma/bulma' with (
+  // Basic Colours
+  $primary: colors.$primary,
+  $info: colors.$info,
+  $success: colors.$success,
+  $warning: colors.$warning,
+  $danger: colors.$danger,
+
+  // Component Colours
+  $content-heading-color: colors.$primary,
+  $footer-background-color: colors.$white,
+  $link: colors.$primary,
+  $title-color: colors.$primary,
+
+  // Typography
   $body-size: 18px,
   $body-line-height: 1.6,
   $family-sans-serif: fonts.$family-sans-serif,
-  $widescreen-enabled: false,
-  $fullhd-enabled: false,
-  $link: colors.$red,
-  $footer-background-color: colors.$white,
-  $size-1: 1.8rem,
+  $size-1: 2.5rem,
   $size-2: 1.6rem,
   $size-3: 1.4rem,
   $size-4: 1.3rem,
-  $size-5: 1.2rem
+  $size-5: 1.2rem,
+
+  // Grid
+  $widescreen-enabled: false,
+  $fullhd-enabled: false,
 );
 
-.content figure.article-image {
+@use 'prism_okaidia_theme' with (
+  $prism-prefix: 'prism--'
+);
+
+.content figure.essay-image {
   margin-left: 0;
   margin-right: 0;
 
@@ -36,4 +54,14 @@
   img {
     width: 100%;
   }
+}
+
+.rails-page-content img {
+  display: block;
+  margin: 2em auto;
+}
+
+.title.rails-title {
+  font-size: 3rem;
+  font-weight: 900;
 }

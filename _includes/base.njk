@@ -5,10 +5,10 @@
   </head>
 
   <body>
+    {% include "navbar.njk" %}
+
     <section class="section">
       <div class="container">
-        {% include "header.njk" %}
-
         {{ content | safe }}
 
         {% include "footer.html" %}

@@ -1,3 +1,17 @@
 $white: hsl(0, 0%, 100%);
-$red: hsl(350, 70%, 37%);
+$orange: hsl(14,  100%, 53%);
+$yellow: hsl(48,  100%, 67%);
+$green: hsl(141, 53%,  53%);
+$turquoise: hsl(171, 100%, 41%);
+$cyan: hsl(204, 71%,  53%);
+$blue: hsl(217, 71%,  53%);
+$purple: hsl(271, 100%, 71%);
+$wine-red: hsl(350, 70%, 37%);
+$red: rgb(211, 23, 10);
 
+// Derived
+$primary: $wine-red;
+$info: $cyan;
+$success: $green;
+$warning: $yellow;
+$danger: $red;

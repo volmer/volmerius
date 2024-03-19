@@ -1,9 +1,11 @@
 ---
-tags: pt
-layout: article
+tags:
+  - essay
+  - pt
+layout: essay
 title: 'Resenha: Verdurada DF'
 date: 2010-11-01 22:00:43 -04:00
-image: articles/verdurada.jpg
+image: essays/verdurada.jpg
 image_alt: 'No palco do Verdurada, várias pessoas juntam-se ao palco do Tirei Zero'
 ---
 

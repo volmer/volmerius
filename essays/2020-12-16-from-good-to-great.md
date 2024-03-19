@@ -1,6 +1,8 @@
 ---
-tags: en
-layout: article
+tags:
+  - essay
+  - en
+layout: essay
 title: From Good to Great
 date: 2020-12-16 11:02:00 -05:00
 ---

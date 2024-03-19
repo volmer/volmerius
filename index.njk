@@ -4,19 +4,37 @@ title: Volmerius
 eleventyExcludeFromCollections: true
 ---
 
-<div class="columns">
-  <div class="column is-one-quarter">
-    <div class="content has-text-centered">
-      <figure class="image">
-        <img src="/images/volmer.jpg" class="is-rounded" alt="Volmer contemplating the infinity of the universe" >
-      </figure>
+<section class="hero">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title is-1 rails-title is-uppercase">Volmer's Rails Guide</h1>
+      <p class="subtitle">A sustainable architecture for Ruby on Rails</p>
     </div>
   </div>
+</section>
 
-  <div class="column">
-    <div class="content">
-      {% set articles = collections.all %}
-      {% include "articles.njk" %}
-    </div>
-  </div>
+<div class="content is-large">
+  <p>
+    This guide offers patterns and guidelines for <strong>sustainable</strong>
+    development with Ruby on Rails.
+  </p>
+
+  <p>
+    Beyond the standard MVC, it aids fast-growing teams build software that is
+    <strong>easy to change</strong> and expand by introducing new layers to your
+    app such as Repositories, Actions, and Inputs.
+  </p>
+
+  <p>
+    By applying this guide, you will have <strong>small objects</strong> that
+    collaborate to each other, each with
+    <strong>single responsibilities</strong>, leading to code that is more
+    organized and easier to understand and test.
+  </p>
+</div>
+
+<div class="buttons is-centered">
+  <a class="button is-primary is-large" href="/rails/introduction">
+    Introduction
+  </a>
 </div>

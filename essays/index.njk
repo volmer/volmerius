@@ -1,0 +1,23 @@
+---
+layout: base
+title: Essays
+eleventyExcludeFromCollections: true
+---
+
+<div class="content">
+  <h1 class="title is-1">Essays</h1>
+
+  <div class="content">
+    <p>
+      This is a collection of essays I wrote throughout my life about a variety
+      of random topics. Don't expect to find any associations between them nor
+      assume they fully represent my current thoughts and opinions.
+    </p>
+  </div>
+
+  {% for essay in collections.essay | reverse %}
+    <h2 class="title is-2">
+      <a href="{{ essay.url }}">{{ essay.data.title }}</a>
+    </h2>
+  {% endfor %}
+</div>

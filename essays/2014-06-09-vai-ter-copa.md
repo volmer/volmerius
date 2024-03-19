@@ -1,6 +1,8 @@
 ---
-tags: pt
-layout: article
+tags:
+  - essay
+  - pt
+layout: essay
 title: Vai Ter Copa?
 date: 2014-06-09 12:10:08 -04:00
 ---

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Missing Pieces</title>
+<meta name="description" content="
+Once well defined roles are chosen for each layer of Rails, it becomes obvious
+that there is no answer about what category of objects should handle
+app-specific business logic. Controllers are responsible for HTTP, views manage
+formatting and presentation, and records deal with persistence. There is a big
+gap between these layers where the actual core piece of the app should live,
+agnostic of communication or databases.">
+<meta name="author" content="Volmer Campos Soares">
+
+<meta property="og:image" content="https://volmerius.com/images/volmer.jpg" />
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="icon" href="/images/volmer.ico" sizes="any">
+<link rel="icon" href="/images/volmer.svg" type="image/svg+xml">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40683618-1', 'volmerius.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item is-size-4 has-text-weight-semibold has-text-primary" href="/">
+        Volmerius
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarLinks">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarLinks" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/rails">
+          Rails Guide
+        </a>
+
+        <a class="navbar-item" href="/essays">
+          Essays
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+    <section class="section">
+      <div class="container">
+        
+<h1 class="title is-1">The Missing Pieces</h1>
+
+<div class="content rails-page-content"><p>Once well defined roles are chosen for each layer of Rails, it becomes obvious
+that there is no answer about what category of objects should handle
+app-specific business logic. Controllers are responsible for HTTP, views manage
+formatting and presentation, and records deal with persistence. There is a big
+gap between these layers where the actual core piece of the app should live,
+agnostic of communication or databases.</p>
+<p><img src="/images/rails/diagram_2.jpg" alt="Diagram 2"></p>
+<p>The cloud with questions marks above is exactly where the hard work of designing
+a good Rails architecture sits. That is the brain of the app, beyond simply
+transporting data from the database to the web via HTTP and markups. That is
+where the rules for permissions, validations, user flows, collaboration with
+other services, and everything that makes the app unique and useful to people.
+That is the app’s business logic.</p>
+<p>The requirements for how business logic should be structured is familiar: there
+should be small objects that collaborate with each other through exchange of
+messages. Each object should have a single responsibility, a limited and concise
+public interface.</p>
+<p>Moreover, these objects should not be coupled with Rails. The layers from the
+framework are already assigned other tasks related to persistence, presentation,
+and transport. The business logic should be decoupled from external libraries as
+much as possible, as it specializes in the universe the app is featured in.</p>
+<p>For that, we will introduce new layers to the app stack: repositories, inputs,
+models, actions, and results. To better explain these concepts, let’s start with
+a simple example of Rails code: a classic blog app. This code is similar to the
+Blog example found in the Rails Guides.</p>
+<p>In the example, there is one Active Record for the table of articles, with a
+couple of validations:</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--comment"># app/models/article.rb</span>
+
+<span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">Article</span> <span class="prism--token prism--operator">&lt;</span> ApplicationRecord
+  validates <span class="prism--token prism--symbol">:title</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">presence</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--boolean">true</span>
+  validates <span class="prism--token prism--symbol">:body</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">presence</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--boolean">true</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">length</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--punctuation">{</span> <span class="prism--token prism--symbol">minimum</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--number">10</span> <span class="prism--token prism--punctuation">}</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>Articles Controller interacts with the Article Record to instantiate, fetch, and
+persist data. This code was generated by the Rails scaffold command:</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--comment"># app/controllers/articles_controller.rb</span>
+<span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">ArticlesController</span> <span class="prism--token prism--operator">&lt;</span> ApplicationController
+  before_action <span class="prism--token prism--symbol">:set_article</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">only</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:show</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:edit</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:update</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:destroy</span><span class="prism--token prism--punctuation">]</span>
+
+  <span class="prism--token prism--comment"># GET /articles</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">index</span></span>
+    <span class="prism--token prism--variable">@articles</span> <span class="prism--token prism--operator">=</span> Article<span class="prism--token prism--punctuation">.</span>all
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">show</span></span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/new</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">new</span></span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">Article</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/1/edit</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">edit</span></span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># POST /articles</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">create</span></span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">Article</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">(</span>article_params<span class="prism--token prism--punctuation">)</span>
+
+    <span class="prism--token prism--keyword">if</span> <span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">.</span>save
+      redirect_to <span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully created.'</span></span>
+    <span class="prism--token prism--keyword">else</span>
+      render <span class="prism--token prism--symbol">:new</span>
+    <span class="prism--token prism--keyword">end</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># PATCH/PUT /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">update</span></span>
+    <span class="prism--token prism--keyword">if</span> <span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">.</span>update<span class="prism--token prism--punctuation">(</span>article_params<span class="prism--token prism--punctuation">)</span>
+      redirect_to <span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully updated.'</span></span>
+    <span class="prism--token prism--keyword">else</span>
+      render <span class="prism--token prism--symbol">:edit</span>
+    <span class="prism--token prism--keyword">end</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># DELETE /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">destroy</span></span>
+    <span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">.</span>destroy
+    redirect_to articles_url<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully destroyed.'</span></span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">private</span>
+
+  <span class="prism--token prism--comment"># Use callbacks to share common setup or constraints between actions.</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">set_article</span></span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> Article<span class="prism--token prism--punctuation">.</span>find<span class="prism--token prism--punctuation">(</span>params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># Only allow a list of trusted parameters through.</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">article_params</span></span>
+    params<span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">require</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:article</span><span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">.</span>permit<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:title</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:body</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>Finally, the views invoked by Articles Controller renders instances of Article
+Record to list their contents, and to generate HTML forms. For example, the
+index view lists all Articles:</p>
+<pre class="language-erb"><code class="language-erb"><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>p</span> <span class="prism--token prism--attr-name">id</span><span class="prism--token prism--attr-value"><span class="prism--token prism--punctuation prism--attr-equals">=</span><span class="prism--token prism--punctuation">"</span>notice<span class="prism--token prism--punctuation">"</span></span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> notice </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>p</span><span class="prism--token prism--punctuation">></span></span>
+
+<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>h1</span><span class="prism--token prism--punctuation">></span></span>Articles<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>h1</span><span class="prism--token prism--punctuation">></span></span>
+
+<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>table</span><span class="prism--token prism--punctuation">></span></span>
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>thead</span><span class="prism--token prism--punctuation">></span></span>
+   <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>tr</span><span class="prism--token prism--punctuation">></span></span>
+     <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>th</span><span class="prism--token prism--punctuation">></span></span>Title<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>th</span><span class="prism--token prism--punctuation">></span></span>
+     <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>th</span><span class="prism--token prism--punctuation">></span></span>Body<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>th</span><span class="prism--token prism--punctuation">></span></span>
+     <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>th</span> <span class="prism--token prism--attr-name">colspan</span><span class="prism--token prism--attr-value"><span class="prism--token prism--punctuation prism--attr-equals">=</span><span class="prism--token prism--punctuation">"</span>3<span class="prism--token prism--punctuation">"</span></span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>th</span><span class="prism--token prism--punctuation">></span></span>
+   <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>tr</span><span class="prism--token prism--punctuation">></span></span>
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>thead</span><span class="prism--token prism--punctuation">></span></span>
+
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>tbody</span><span class="prism--token prism--punctuation">></span></span>
+   <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%</span><span class="prism--token prism--ruby prism--language-ruby"> <span class="prism--token prism--variable">@articles</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">each</span> <span class="prism--token prism--keyword">do</span> <span class="prism--token prism--operator">|</span>article<span class="prism--token prism--operator">|</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+     <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>tr</span><span class="prism--token prism--punctuation">></span></span>
+       <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>td</span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> article<span class="prism--token prism--punctuation">.</span>title </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>td</span><span class="prism--token prism--punctuation">></span></span>
+       <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>td</span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> article<span class="prism--token prism--punctuation">.</span>body </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>td</span><span class="prism--token prism--punctuation">></span></span>
+       <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>td</span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> link_to <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Show'</span></span><span class="prism--token prism--punctuation">,</span> article </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>td</span><span class="prism--token prism--punctuation">></span></span>
+       <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>td</span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> link_to <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Edit'</span></span><span class="prism--token prism--punctuation">,</span> edit_article_path<span class="prism--token prism--punctuation">(</span>article<span class="prism--token prism--punctuation">)</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>td</span><span class="prism--token prism--punctuation">></span></span>
+       <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>td</span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> link_to <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Destroy'</span></span><span class="prism--token prism--punctuation">,</span> article<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">method</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--symbol">:delete</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">data</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--punctuation">{</span> <span class="prism--token prism--symbol">confirm</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Are you sure?'</span></span> <span class="prism--token prism--punctuation">}</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>td</span><span class="prism--token prism--punctuation">></span></span>
+     <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>tr</span><span class="prism--token prism--punctuation">></span></span>
+   <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%</span><span class="prism--token prism--ruby prism--language-ruby"> <span class="prism--token prism--keyword">end</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>tbody</span><span class="prism--token prism--punctuation">></span></span>
+<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>table</span><span class="prism--token prism--punctuation">></span></span>
+
+<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>br</span><span class="prism--token prism--punctuation">></span></span>
+
+<span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> link_to <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'New Article'</span></span><span class="prism--token prism--punctuation">,</span> new_article_path </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span></code></pre>
+<p>The new view, for instance, renders an HTML form to allow users to write new
+Articles:</p>
+<pre class="language-erb"><code class="language-erb"><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>h1</span><span class="prism--token prism--punctuation">></span></span>New Article<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>h1</span><span class="prism--token prism--punctuation">></span></span>
+
+<span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> form_with<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">model</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">)</span> <span class="prism--token prism--keyword">do</span> <span class="prism--token prism--operator">|</span>form<span class="prism--token prism--operator">|</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+ <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%</span><span class="prism--token prism--ruby prism--language-ruby"> <span class="prism--token prism--keyword">if</span> <span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">.</span>errors<span class="prism--token prism--punctuation">.</span>any<span class="prism--token prism--operator">?</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+   <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>div</span> <span class="prism--token prism--attr-name">id</span><span class="prism--token prism--attr-value"><span class="prism--token prism--punctuation prism--attr-equals">=</span><span class="prism--token prism--punctuation">"</span>error_explanation<span class="prism--token prism--punctuation">"</span></span><span class="prism--token prism--punctuation">></span></span>
+     <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>h2</span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> pluralize<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">.</span>errors<span class="prism--token prism--punctuation">.</span>count<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">"error"</span></span><span class="prism--token prism--punctuation">)</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span> prohibited this article from being saved:<span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>h2</span><span class="prism--token prism--punctuation">></span></span>
+
+     <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>ul</span><span class="prism--token prism--punctuation">></span></span>
+       <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%</span><span class="prism--token prism--ruby prism--language-ruby"> <span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">.</span>errors<span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">each</span> <span class="prism--token prism--keyword">do</span> <span class="prism--token prism--operator">|</span>error<span class="prism--token prism--operator">|</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+         <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>li</span><span class="prism--token prism--punctuation">></span></span><span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> error<span class="prism--token prism--punctuation">.</span>full_message </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span><span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>li</span><span class="prism--token prism--punctuation">></span></span>
+       <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%</span><span class="prism--token prism--ruby prism--language-ruby"> <span class="prism--token prism--keyword">end</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+     <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>ul</span><span class="prism--token prism--punctuation">></span></span>
+   <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>div</span><span class="prism--token prism--punctuation">></span></span>
+ <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%</span><span class="prism--token prism--ruby prism--language-ruby"> <span class="prism--token prism--keyword">end</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>div</span> <span class="prism--token prism--attr-name">class</span><span class="prism--token prism--attr-value"><span class="prism--token prism--punctuation prism--attr-equals">=</span><span class="prism--token prism--punctuation">"</span>field<span class="prism--token prism--punctuation">"</span></span><span class="prism--token prism--punctuation">></span></span>
+   <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> form<span class="prism--token prism--punctuation">.</span>label <span class="prism--token prism--symbol">:title</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+   <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> form<span class="prism--token prism--punctuation">.</span>text_field <span class="prism--token prism--symbol">:title</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>div</span><span class="prism--token prism--punctuation">></span></span>
+
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>div</span> <span class="prism--token prism--attr-name">class</span><span class="prism--token prism--attr-value"><span class="prism--token prism--punctuation prism--attr-equals">=</span><span class="prism--token prism--punctuation">"</span>field<span class="prism--token prism--punctuation">"</span></span><span class="prism--token prism--punctuation">></span></span>
+   <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> form<span class="prism--token prism--punctuation">.</span>label <span class="prism--token prism--symbol">:body</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+   <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> form<span class="prism--token prism--punctuation">.</span>text_area <span class="prism--token prism--symbol">:body</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>div</span><span class="prism--token prism--punctuation">></span></span>
+
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;</span>div</span> <span class="prism--token prism--attr-name">class</span><span class="prism--token prism--attr-value"><span class="prism--token prism--punctuation prism--attr-equals">=</span><span class="prism--token prism--punctuation">"</span>actions<span class="prism--token prism--punctuation">"</span></span><span class="prism--token prism--punctuation">></span></span>
+   <span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> form<span class="prism--token prism--punctuation">.</span>submit </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+ <span class="prism--token prism--tag"><span class="prism--token prism--tag"><span class="prism--token prism--punctuation">&lt;/</span>div</span><span class="prism--token prism--punctuation">></span></span>
+<span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%</span><span class="prism--token prism--ruby prism--language-ruby"> <span class="prism--token prism--keyword">end</span> </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span>
+
+<span class="prism--token prism--erb prism--language-erb"><span class="prism--token prism--delimiter prism--punctuation">&lt;%=</span><span class="prism--token prism--ruby prism--language-ruby"> link_to <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Back'</span></span><span class="prism--token prism--punctuation">,</span> articles_path </span><span class="prism--token prism--delimiter prism--punctuation">%></span></span></code></pre>
+</div>
+
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+
+      
+        <a class="pagination-previous" href="/rails/a-better-architecture/">Previous: A Better Architecture</a>
+      
+
+      
+
+      
+        <a class="pagination-next" href="/rails/repositories/">Next: Repositories</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</nav>
+
+
+        <footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <a href="https://twitter.com/volmerius" target="_blank" rel="noopener" title="X">
+        <span class="icon is-medium">
+          <i class="fab fa-2x fa-x-twitter"></i>
+        </span>
+      </a>
+    </p>
+  </div>
+
+  <div class="content has-text-centered is-small">
+    <p>Copyright © 2024 Volmer Campos Soares</p>
+  </div>
+</footer>
+
+      </div>
+    </section>
+  </body>
+</html>

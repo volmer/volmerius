@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Actions</title>
+<meta name="description" content="
+So far we have introduced new casts of objects that distribute the roles
+traditionally played by Active Record, decoupling the app’s business logic from
+Records and encapsulating them to database persistence. However, controllers are
+still sharing part of the responsibilities of business logic. In the Blog
+example, Articles Controller still sends the validate message to the input,
+which is a core logic that belongs to the business layer.">
+<meta name="author" content="Volmer Campos Soares">
+
+<meta property="og:image" content="https://volmerius.com/images/volmer.jpg" />
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="icon" href="/images/volmer.ico" sizes="any">
+<link rel="icon" href="/images/volmer.svg" type="image/svg+xml">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40683618-1', 'volmerius.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item is-size-4 has-text-weight-semibold has-text-primary" href="/">
+        Volmerius
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarLinks">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarLinks" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/rails">
+          Rails Guide
+        </a>
+
+        <a class="navbar-item" href="/essays">
+          Essays
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+    <section class="section">
+      <div class="container">
+        
+<h1 class="title is-1">Actions</h1>
+
+<div class="content rails-page-content"><p>So far we have introduced new casts of objects that distribute the roles
+traditionally played by Active Record, decoupling the app’s business logic from
+Records and encapsulating them to database persistence. However, controllers are
+still sharing part of the responsibilities of business logic. In the Blog
+example, Articles Controller still sends the validate message to the input,
+which is a core logic that belongs to the business layer.</p>
+<p>It is also important to note that in real world scenarios many other operations
+are involved in processing a request other than just input validation and a
+single call to the database. Emails are sent, jobs are enqueued, and requests to
+external services are performed, among others. If all this is handled at the
+controller level, the same smells previously explored will still be present,
+regardless of use of Repositories, Inputs, and Models. For those we need a
+boundary layer on top of the app’s business logic, so controllers can sit
+loosely on top of it and remain solely responsible for HTTP concerns. Enter
+Action objects.</p>
+<p>Actions represent the entry points to the app’s core logic. These objects
+coordinate workflows in order to get operations and activities done. Ultimately,
+Actions are the public interface of the app’s business layers.</p>
+<p>Rails controllers talk to the app’s internals by sending messages to specific
+Actions, optionally with the required inputs. Actions have a one-to-one
+relationship with incoming requests: they are paired symmetrically with end-user
+intents and demands. This is quite a special requirement from this layer: any
+given HTTP request handled by the app should be handled by a single Action.</p>
+<p>The fact that each Action represents a meaningful and complete request-response
+cycle forces modularization for the app’s business logic, exposing immediately
+complex relationships between objects at the same time that frees up the app
+from scenarios such as interdependent requests. In other words, Actions do not
+have knowledge or coupling between other Actions whatsoever.</p>
+<p>Actions respond to a single public method perform. Each Action defines its own
+set of required arguments for perform, as well what can be expected as the
+result of that method. The returned value is not any object, however. We have a
+special type of object dedicated to represent the outcome of an Action: Results.</p>
+<p>Results are special Structs that are generated dynamically to accommodate a set
+of members. These members are inferred based on instance variables explicitly
+exposed by each Action. Since different Actions might want to expose zero to
+multiple values, they are always returned as members of a Result instance.</p>
+<p>Regardless of the variables the Action might want to expose, a Result has one
+default member called errors, which holds any errors that might occur when the
+Action is performed. If Result errors are empty, the Result is a success; if
+there are errors present, however, the Result is a failure. This empowers
+Actions with a predictable public interface, so callers can expect how to
+evaluate if an operation was successful or not by simply checking the success or
+failure of a Result.</p>
+<p>For the sample Blog app, let’s refactor the existing code to use Actions and
+Results. The Result itself is a Struct with at least one member for <code>errors</code>:</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">Result</span> <span class="prism--token prism--operator">&lt;</span> <span class="prism--token prism--builtin">Struct</span>
+  <span class="prism--token prism--keyword">class</span> <span class="prism--token prism--operator">&lt;&lt;</span> <span class="prism--token prism--keyword">self</span>
+    <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">new</span></span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">*</span>members<span class="prism--token prism--punctuation">)</span>
+      members <span class="prism--token prism--operator">&lt;&lt;</span> <span class="prism--token prism--symbol">:errors</span> <span class="prism--token prism--keyword">unless</span> members<span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">include</span><span class="prism--token prism--operator">?</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:errors</span><span class="prism--token prism--punctuation">)</span>
+      <span class="prism--token prism--keyword">super</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">*</span>members<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">end</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">initialize</span></span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">**</span>values<span class="prism--token prism--punctuation">)</span>
+    errors <span class="prism--token prism--operator">=</span> values<span class="prism--token prism--punctuation">.</span>fetch<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:errors</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--punctuation">[</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">super</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">**</span>values<span class="prism--token prism--punctuation">.</span>merge<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">errors</span><span class="prism--token prism--operator">:</span> errors<span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">success</span></span><span class="prism--token prism--operator">?</span>
+    errors<span class="prism--token prism--punctuation">.</span>none<span class="prism--token prism--operator">?</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>Actions are specializations of the base Action class, which defines a few helper
+methods to generate Results. Each concrete Action is expected to define its own
+perform method thereafter and always return a Result. As mentioned above, the
+Action whitelists certain instance variables that are exposed in the Result that
+its perform method returns. In case of errors, the failure method can be called,
+which exits the perform method right away and returns a Result populated with
+the given errors.</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">Action</span>
+  <span class="prism--token prism--keyword">module</span> <span class="prism--token prism--class-name">Decorator</span>
+    <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">perform</span></span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">...</span><span class="prism--token prism--punctuation">)</span>
+      catch<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:failure</span><span class="prism--token prism--punctuation">)</span> <span class="prism--token prism--keyword">do</span>
+        <span class="prism--token prism--keyword">super</span>
+        result
+      <span class="prism--token prism--keyword">end</span>
+    <span class="prism--token prism--keyword">end</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">class</span> <span class="prism--token prism--operator">&lt;&lt;</span> <span class="prism--token prism--keyword">self</span>
+    attr_writer <span class="prism--token prism--symbol">:exposures</span>
+
+    <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">exposures</span></span>
+      <span class="prism--token prism--variable">@exposures</span> <span class="prism--token prism--operator">||=</span> <span class="prism--token prism--punctuation">[</span><span class="prism--token prism--punctuation">]</span>
+    <span class="prism--token prism--keyword">end</span>
+
+    <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">expose</span></span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">*</span>names<span class="prism--token prism--punctuation">)</span>
+      <span class="prism--token prism--variable">@exposures</span> <span class="prism--token prism--operator">+=</span> names
+    <span class="prism--token prism--keyword">end</span>
+
+    <span class="prism--token prism--keyword">private</span>
+
+    <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">inherited</span></span><span class="prism--token prism--punctuation">(</span>subclass<span class="prism--token prism--punctuation">)</span>
+      <span class="prism--token prism--keyword">super</span>
+      subclass<span class="prism--token prism--punctuation">.</span>exposures <span class="prism--token prism--operator">=</span> exposures<span class="prism--token prism--punctuation">.</span>dup
+      subclass<span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">prepend</span><span class="prism--token prism--punctuation">(</span>Decorator<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">end</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">failure</span></span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">*</span>errors<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">throw</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:failure</span><span class="prism--token prism--punctuation">,</span> result<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">errors</span><span class="prism--token prism--operator">:</span> errors<span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">private</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">result</span></span><span class="prism--token prism--punctuation">(</span>members <span class="prism--token prism--operator">=</span> <span class="prism--token prism--punctuation">{</span><span class="prism--token prism--punctuation">}</span><span class="prism--token prism--punctuation">)</span>
+    result_class <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">Result</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">*</span><span class="prism--token prism--keyword">self</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">class</span><span class="prism--token prism--punctuation">.</span>exposures<span class="prism--token prism--punctuation">)</span>
+
+    values <span class="prism--token prism--operator">=</span> <span class="prism--token prism--keyword">self</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">class</span><span class="prism--token prism--punctuation">.</span>exposures<span class="prism--token prism--punctuation">.</span>to_h <span class="prism--token prism--keyword">do</span> <span class="prism--token prism--operator">|</span>name<span class="prism--token prism--operator">|</span>
+      <span class="prism--token prism--punctuation">[</span>name<span class="prism--token prism--punctuation">,</span> instance_variable_get<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--string-literal"><span class="prism--token prism--string">"@</span><span class="prism--token prism--interpolation"><span class="prism--token prism--delimiter prism--punctuation">#{</span><span class="prism--token prism--content">name</span><span class="prism--token prism--delimiter prism--punctuation">}</span></span><span class="prism--token prism--string">"</span></span><span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">]</span>
+    <span class="prism--token prism--keyword">end</span>
+
+    result_class<span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">**</span>values<span class="prism--token prism--punctuation">.</span>merge<span class="prism--token prism--punctuation">(</span>members<span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>We are now ready to write concrete Actions that return Results. Starting with a
+simple Action that finds an Article for a given ID. This Action defines its own
+Result as having an article member that contains the desired Article instance.
+Note that this Action always returns a successful Result.</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">ShowArticleAction</span> <span class="prism--token prism--operator">&lt;</span> Action
+  expose <span class="prism--token prism--symbol">:article</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">perform</span></span><span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>find<span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>Here’s an example of how an Action takes an Article Input and returns an Article
+Result. This Action checks if the input is valid, and proceeds with calling the
+Repository for persistence. If the input is invalid, however, it returns a
+failure Result populated with the validation errors.</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">CreateArticleAction</span> <span class="prism--token prism--operator">&lt;</span> Action
+  expose <span class="prism--token prism--symbol">:article</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">perform</span></span><span class="prism--token prism--punctuation">(</span>input<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">if</span> input<span class="prism--token prism--punctuation">.</span>valid<span class="prism--token prism--operator">?</span>
+      <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>create<span class="prism--token prism--punctuation">(</span>input<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">else</span>
+      failure<span class="prism--token prism--punctuation">(</span>input<span class="prism--token prism--punctuation">.</span>errors<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">end</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>Exposed variables are optional. Some Actions can simply return an empty success
+Result as a return value, such as the Delete Article Action:</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">DeleteArticleAction</span> <span class="prism--token prism--operator">&lt;</span> Action
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">perform</span></span><span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>delete<span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>These Actions (and others that handle updating and listing Articles) are used in
+the controller as follows:</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">ArticlesController</span> <span class="prism--token prism--operator">&lt;</span> ApplicationController
+  <span class="prism--token prism--comment"># GET /articles</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">index</span></span>
+    <span class="prism--token prism--variable">@result</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ListArticlesAction</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>perform
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">show</span></span>
+    <span class="prism--token prism--variable">@result</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ShowArticleAction</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>perform<span class="prism--token prism--punctuation">(</span>params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/new</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">new</span></span>
+    <span class="prism--token prism--variable">@input</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleInput</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/1/edit</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">edit</span></span>
+    <span class="prism--token prism--variable">@result</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">EditArticleAction</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>perform<span class="prism--token prism--punctuation">(</span>params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--variable">@input</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleInput</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">(</span>
+      <span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--variable">@result</span><span class="prism--token prism--punctuation">.</span>article<span class="prism--token prism--punctuation">.</span>title<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--variable">@result</span><span class="prism--token prism--punctuation">.</span>article<span class="prism--token prism--punctuation">.</span>body
+    <span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># POST /articles</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">create</span></span>
+    <span class="prism--token prism--variable">@input</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleInput</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">(</span>article_params<span class="prism--token prism--punctuation">)</span>
+
+    <span class="prism--token prism--variable">@result</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">CreateArticleAction</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>perform<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--variable">@input</span><span class="prism--token prism--punctuation">)</span>
+
+    <span class="prism--token prism--keyword">if</span> <span class="prism--token prism--variable">@result</span><span class="prism--token prism--punctuation">.</span>success<span class="prism--token prism--operator">?</span>
+      redirect_to<span class="prism--token prism--punctuation">(</span>
+        article_path<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--variable">@result</span><span class="prism--token prism--punctuation">.</span>article<span class="prism--token prism--punctuation">.</span>id<span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">,</span>
+        <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully created.'</span></span>
+      <span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">else</span>
+      render<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:new</span><span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">end</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># PATCH/PUT /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">update</span></span>
+    <span class="prism--token prism--variable">@input</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleInput</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">(</span>article_params<span class="prism--token prism--punctuation">)</span>
+
+    <span class="prism--token prism--variable">@result</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">UpdateArticleAction</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>perform<span class="prism--token prism--punctuation">(</span>params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--variable">@input</span><span class="prism--token prism--punctuation">)</span>
+
+    <span class="prism--token prism--keyword">if</span> <span class="prism--token prism--variable">@result</span><span class="prism--token prism--punctuation">.</span>success<span class="prism--token prism--operator">?</span>
+      redirect_to<span class="prism--token prism--punctuation">(</span>
+        article_path<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--variable">@result</span><span class="prism--token prism--punctuation">.</span>article<span class="prism--token prism--punctuation">.</span>id<span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">,</span>
+        <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully updated.'</span></span>
+      <span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">else</span>
+      render<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:edit</span><span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--keyword">end</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># DELETE /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">destroy</span></span>
+    <span class="prism--token prism--class-name">DeleteArticleAction</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>perform<span class="prism--token prism--punctuation">(</span>params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">)</span>
+    redirect_to articles_url<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully destroyed.'</span></span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">private</span>
+
+  <span class="prism--token prism--comment"># Only allow a list of trusted parameters through.</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">article_params</span></span>
+    params<span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">require</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:article_input</span><span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">.</span>permit<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:title</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:body</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>The controller now has the single responsibility of abstracting away HTTP
+concerns, such as extracting data from request parameters and forwarding them to
+the proper Actions. According to the Result returned, the controller then crafts
+the appropriate HTTP response. Controllers don’t hold any logic regarding
+validations, persistence, or anything else behind an Action.</p>
+<p><img src="/images/rails/diagram_3.jpg" alt="Diagram 3"></p>
+<p>The combination of these additional layers of Actions, Results, Inputs, Models,
+and Repositories allows apps to have small objects with specific roles handling
+the business logic. The default Rails objects are specialized in single
+responsibilities, and the resulting architecture is one which requests are
+handled by a network of objects collaborating between themselves. These objects
+are easy to understand, test, and most importantly, much easier to change.</p>
+</div>
+
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+
+      
+        <a class="pagination-previous" href="/rails/models/">Previous: Models</a>
+      
+
+      
+
+      
+        <a class="pagination-next" href="/rails/extensions/">Next: Extensions</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+</nav>
+
+
+        <footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <a href="https://twitter.com/volmerius" target="_blank" rel="noopener" title="X">
+        <span class="icon is-medium">
+          <i class="fab fa-2x fa-x-twitter"></i>
+        </span>
+      </a>
+    </p>
+  </div>
+
+  <div class="content has-text-centered is-small">
+    <p>Copyright © 2024 Volmer Campos Soares</p>
+  </div>
+</footer>
+
+      </div>
+    </section>
+  </body>
+</html>

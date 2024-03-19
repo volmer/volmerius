@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Models</title>
+<meta name="description" content="
+Models are objects that represent core entities of the app’s business logic.
+These are usually persisted and can be fetched and created as needed. They have
+unique keys for identification (usually a numeric value), and, most importantly
+perhaps, they are immutable. This is the key difference between this new Model
+layer of objects and the Active Record instances regularly referred to as models
+in typical Rails default apps.">
+<meta name="author" content="Volmer Campos Soares">
+
+<meta property="og:image" content="https://volmerius.com/images/volmer.jpg" />
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="icon" href="/images/volmer.ico" sizes="any">
+<link rel="icon" href="/images/volmer.svg" type="image/svg+xml">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40683618-1', 'volmerius.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item is-size-4 has-text-weight-semibold has-text-primary" href="/">
+        Volmerius
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarLinks">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarLinks" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/rails">
+          Rails Guide
+        </a>
+
+        <a class="navbar-item" href="/essays">
+          Essays
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+    <section class="section">
+      <div class="container">
+        
+<h1 class="title is-1">Models</h1>
+
+<div class="content rails-page-content"><p>Models are objects that represent core entities of the app’s business logic.
+These are usually persisted and can be fetched and created as needed. They have
+unique keys for identification (usually a numeric value), and, most importantly
+perhaps, they are immutable. This is the key difference between this new Model
+layer of objects and the Active Record instances regularly referred to as models
+in typical Rails default apps.</p>
+<p>Another difference between Models and Records is that, once instantiated, Models
+simply hold its attributes immutably, and they don’t have any capabilities to
+create or update any information in the persistence layer.</p>
+<p>The collaboration between Repositories and Models is what allows Active Record
+to be completely hidden away from any other areas of the app. There are no
+references to Records in controllers, views, and anywhere else. Repositories are
+invoked instead, which in turn return read-only Models.</p>
+<p>Let’s refactor the previous example of the Blog app to encapsulate the Article
+Record behind a Model and use those as return values in the Article Repository.</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--comment"># app/models/article.rb</span>
+
+<span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">Article</span>
+  attr_reader <span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:title</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:body</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:created_at</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:updated_at</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">initialize</span></span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">id</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">created_at</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">updated_at</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--variable">@id</span> <span class="prism--token prism--operator">=</span> id
+    <span class="prism--token prism--variable">@title</span> <span class="prism--token prism--operator">=</span> title
+    <span class="prism--token prism--variable">@body</span> <span class="prism--token prism--operator">=</span> body
+    <span class="prism--token prism--variable">@created_at</span> <span class="prism--token prism--operator">=</span> created_at
+    <span class="prism--token prism--variable">@updated_at</span> <span class="prism--token prism--operator">=</span> updated_at
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">ArticleRepository</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">all</span></span>
+    ArticleRecord<span class="prism--token prism--punctuation">.</span>all<span class="prism--token prism--punctuation">.</span>map <span class="prism--token prism--punctuation">{</span> <span class="prism--token prism--operator">|</span>record<span class="prism--token prism--operator">|</span> to_model<span class="prism--token prism--punctuation">(</span>record<span class="prism--token prism--punctuation">.</span>attributes<span class="prism--token prism--punctuation">)</span> <span class="prism--token prism--punctuation">}</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">create</span></span><span class="prism--token prism--punctuation">(</span>input<span class="prism--token prism--punctuation">)</span>
+    record <span class="prism--token prism--operator">=</span> ArticleRecord<span class="prism--token prism--punctuation">.</span>create<span class="prism--token prism--operator">!</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span> input<span class="prism--token prism--punctuation">.</span>title<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span> input<span class="prism--token prism--punctuation">.</span>body<span class="prism--token prism--punctuation">)</span>
+    to_model<span class="prism--token prism--punctuation">(</span>record<span class="prism--token prism--punctuation">.</span>attributes<span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">find</span></span><span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    record <span class="prism--token prism--operator">=</span> ArticleRecord<span class="prism--token prism--punctuation">.</span>find<span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    to_model<span class="prism--token prism--punctuation">(</span>record<span class="prism--token prism--punctuation">.</span>attributes<span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">update</span></span><span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">,</span> input<span class="prism--token prism--punctuation">)</span>
+    record <span class="prism--token prism--operator">=</span> ArticleRecord<span class="prism--token prism--punctuation">.</span>find<span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    record<span class="prism--token prism--punctuation">.</span>update<span class="prism--token prism--operator">!</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span> input<span class="prism--token prism--punctuation">.</span>title<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span> input<span class="prism--token prism--punctuation">.</span>body<span class="prism--token prism--punctuation">)</span>
+    to_model<span class="prism--token prism--punctuation">(</span>record<span class="prism--token prism--punctuation">.</span>attributes<span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">delete</span></span><span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    record <span class="prism--token prism--operator">=</span> ArticleRecord<span class="prism--token prism--punctuation">.</span>find<span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    record<span class="prism--token prism--punctuation">.</span>destroy<span class="prism--token prism--operator">!</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">private</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">to_model</span></span><span class="prism--token prism--punctuation">(</span>attributes<span class="prism--token prism--punctuation">)</span>
+    <span class="prism--token prism--class-name">Article</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--operator">**</span>attributes<span class="prism--token prism--punctuation">.</span>symbolize_keys<span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>Note that since we were already using the Article Record as read-only objects,
+we were able to simply change the value returned by the Repository to a Model
+without breaking our controller and views.</p>
+</div>
+
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+
+      
+        <a class="pagination-previous" href="/rails/inputs/">Previous: Inputs</a>
+      
+
+      
+
+      
+        <a class="pagination-next" href="/rails/actions/">Next: Actions</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</nav>
+
+
+        <footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <a href="https://twitter.com/volmerius" target="_blank" rel="noopener" title="X">
+        <span class="icon is-medium">
+          <i class="fab fa-2x fa-x-twitter"></i>
+        </span>
+      </a>
+    </p>
+  </div>
+
+  <div class="content has-text-centered is-small">
+    <p>Copyright © 2024 Volmer Campos Soares</p>
+  </div>
+</footer>
+
+      </div>
+    </section>
+  </body>
+</html>

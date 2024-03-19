@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repositories</title>
+<meta name="description" content="
+A big subset of smells in Rails apps is found in Active Record classes. As seen
+previously, these objects just do way too much by default and are abused to
+operate both persistence and business logic roles. One of the goals of a
+sustainable Rails architecture is to isolate Active Record down to its basic
+database-related capabilities, and to keep the app’s core business logic as
+decoupled as possible from it. To this end, a number of objects will be
+introduced on top of the persistence layer, starting with Repositories.">
+<meta name="author" content="Volmer Campos Soares">
+
+<meta property="og:image" content="https://volmerius.com/images/volmer.jpg" />
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="icon" href="/images/volmer.ico" sizes="any">
+<link rel="icon" href="/images/volmer.svg" type="image/svg+xml">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40683618-1', 'volmerius.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item is-size-4 has-text-weight-semibold has-text-primary" href="/">
+        Volmerius
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarLinks">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarLinks" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/rails">
+          Rails Guide
+        </a>
+
+        <a class="navbar-item" href="/essays">
+          Essays
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+    <section class="section">
+      <div class="container">
+        
+<h1 class="title is-1">Repositories</h1>
+
+<div class="content rails-page-content"><p>A big subset of smells in Rails apps is found in Active Record classes. As seen
+previously, these objects just do way too much by default and are abused to
+operate both persistence and business logic roles. One of the goals of a
+sustainable Rails architecture is to isolate Active Record down to its basic
+database-related capabilities, and to keep the app’s core business logic as
+decoupled as possible from it. To this end, a number of objects will be
+introduced on top of the persistence layer, starting with Repositories.</p>
+<p>Repositories are responsible for the persistence layer of the app. They
+encapsulate Rails’ Active Record in a subset of simple methods for querying and
+persistence of data, and return simple read-only objects as a result. This
+allows the app to isolate Active Record only to this subset, exposing only the
+desired queries and methods to other layers through Repositories. Let’s refactor
+the previous example of the Blog app to encapsulate the Article Record behind a
+Repository.</p>
+<p>As mentioned previously, Active Record objects are now referred to as simply
+Records. The previous Article class is now moved from <code>app/models</code> to
+<code>app/records</code> and renamed to Article Record.</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--comment"># app/records/article_record.rb</span>
+
+<span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">ArticleRecord</span> <span class="prism--token prism--operator">&lt;</span> ApplicationRecord
+  <span class="prism--token prism--keyword">self</span><span class="prism--token prism--punctuation">.</span>table_name <span class="prism--token prism--operator">=</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'articles'</span></span>
+
+  validates <span class="prism--token prism--symbol">:title</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">presence</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--boolean">true</span>
+  validates <span class="prism--token prism--symbol">:body</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">presence</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--boolean">true</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">length</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--punctuation">{</span> <span class="prism--token prism--symbol">minimum</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--number">10</span> <span class="prism--token prism--punctuation">}</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>All operations previously handled by Article Record, such as finding, creating,
+and deleting records are now done through the Article Repository.</p>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--comment"># app/repositories/articles_repository.rb</span>
+
+<span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">ArticleRepository</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">all</span></span>
+    ArticleRecord<span class="prism--token prism--punctuation">.</span>all
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">create</span></span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">)</span>
+    ArticleRecord<span class="prism--token prism--punctuation">.</span>create<span class="prism--token prism--operator">!</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span> title<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span> body<span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">find</span></span><span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    ArticleRecord<span class="prism--token prism--punctuation">.</span>find<span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">update</span></span><span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span><span class="prism--token prism--punctuation">)</span>
+    record <span class="prism--token prism--operator">=</span> find<span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    record<span class="prism--token prism--punctuation">.</span>update<span class="prism--token prism--operator">!</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span> title<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span> body<span class="prism--token prism--punctuation">)</span>
+    record
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">delete</span></span><span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    record <span class="prism--token prism--operator">=</span> find<span class="prism--token prism--punctuation">(</span>id<span class="prism--token prism--punctuation">)</span>
+    record<span class="prism--token prism--punctuation">.</span>destroy<span class="prism--token prism--operator">!</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<pre class="language-ruby"><code class="language-ruby"><span class="prism--token prism--comment"># app/controllers/articles_controller.rb</span>
+
+<span class="prism--token prism--keyword">class</span> <span class="prism--token prism--class-name">ArticlesController</span> <span class="prism--token prism--operator">&lt;</span> ApplicationController
+  <span class="prism--token prism--comment"># GET /articles</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">index</span></span>
+    <span class="prism--token prism--variable">@articles</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>all
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">show</span></span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>find<span class="prism--token prism--punctuation">(</span>params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/new</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">new</span></span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleRecord</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># GET /articles/1/edit</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">edit</span></span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>find<span class="prism--token prism--punctuation">(</span>params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># POST /articles</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">create</span></span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>create<span class="prism--token prism--punctuation">(</span>
+      <span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span> article_params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:title</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span> article_params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:body</span><span class="prism--token prism--punctuation">]</span>
+    <span class="prism--token prism--punctuation">)</span>
+
+    redirect_to article_path<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully created.'</span></span>
+  <span class="prism--token prism--keyword">rescue</span> ActiveRecord<span class="prism--token prism--double-colon prism--punctuation">::</span>RecordInvalid <span class="prism--token prism--operator">=></span> error
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> error<span class="prism--token prism--punctuation">.</span>record
+    render <span class="prism--token prism--symbol">:new</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># PATCH/PUT /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">update</span></span>
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>update<span class="prism--token prism--punctuation">(</span>
+      params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">title</span><span class="prism--token prism--operator">:</span> article_params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:title</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">body</span><span class="prism--token prism--operator">:</span> article_params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:body</span><span class="prism--token prism--punctuation">]</span>
+    <span class="prism--token prism--punctuation">)</span>
+
+    redirect_to article_path<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--variable">@article</span><span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully updated.'</span></span>
+  <span class="prism--token prism--keyword">rescue</span> ActiveRecord<span class="prism--token prism--double-colon prism--punctuation">::</span>RecordInvalid <span class="prism--token prism--operator">=></span> error
+    <span class="prism--token prism--variable">@article</span> <span class="prism--token prism--operator">=</span> error<span class="prism--token prism--punctuation">.</span>record
+    render <span class="prism--token prism--symbol">:edit</span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--comment"># DELETE /articles/1</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">destroy</span></span>
+    <span class="prism--token prism--class-name">ArticleRepository</span><span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">new</span><span class="prism--token prism--punctuation">.</span>delete<span class="prism--token prism--punctuation">(</span>params<span class="prism--token prism--punctuation">[</span><span class="prism--token prism--symbol">:id</span><span class="prism--token prism--punctuation">]</span><span class="prism--token prism--punctuation">)</span>
+    redirect_to articles_url<span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">notice</span><span class="prism--token prism--operator">:</span> <span class="prism--token prism--string-literal"><span class="prism--token prism--string">'Article was successfully destroyed.'</span></span>
+  <span class="prism--token prism--keyword">end</span>
+
+  <span class="prism--token prism--keyword">private</span>
+
+
+  <span class="prism--token prism--comment"># Only allow a list of trusted parameters through.</span>
+  <span class="prism--token prism--keyword">def</span> <span class="prism--token prism--method-definition"><span class="prism--token prism--function">article_params</span></span>
+    params<span class="prism--token prism--punctuation">.</span><span class="prism--token prism--keyword">require</span><span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:article_record</span><span class="prism--token prism--punctuation">)</span><span class="prism--token prism--punctuation">.</span>permit<span class="prism--token prism--punctuation">(</span><span class="prism--token prism--symbol">:title</span><span class="prism--token prism--punctuation">,</span> <span class="prism--token prism--symbol">:body</span><span class="prism--token prism--punctuation">)</span>
+  <span class="prism--token prism--keyword">end</span>
+<span class="prism--token prism--keyword">end</span></code></pre>
+<p>Note, however, that Active Record is not completely encapsulated just yet. After
+all, queries still return Record objects that controllers and views rely
+on in order to handle parameters and read data. These Records are used for
+multiple responsibilities: in some actions, such as new and edit, they represent
+the user’s input; in others, like in index and show, they play the role of
+actual persisted entities of the system. Records also hold the validation errors
+that might happen when a persistence operation is attempted.</p>
+<p>In order to isolate Active Record completely, we must replace these cases with
+simpler objects for each of these responsibilities. Enter Inputs and Models.</p>
+</div>
+
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+
+      
+        <a class="pagination-previous" href="/rails/the-missing-pieces/">Previous: The Missing Pieces</a>
+      
+
+      
+
+      
+        <a class="pagination-next" href="/rails/inputs/">Next: Inputs</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</nav>
+
+
+        <footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <a href="https://twitter.com/volmerius" target="_blank" rel="noopener" title="X">
+        <span class="icon is-medium">
+          <i class="fab fa-2x fa-x-twitter"></i>
+        </span>
+      </a>
+    </p>
+  </div>
+
+  <div class="content has-text-centered is-small">
+    <p>Copyright © 2024 Volmer Campos Soares</p>
+  </div>
+</footer>
+
+      </div>
+    </section>
+  </body>
+</html>

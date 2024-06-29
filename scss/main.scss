@@ -9,19 +9,14 @@
 @use 'colors';
 @use 'fonts';
 
-@use '../node_modules/bulma/bulma' with (
+@use '../node_modules/bulma/sass' with (
   // Basic Colours
   $primary: colors.$primary,
   $info: colors.$info,
   $success: colors.$success,
   $warning: colors.$warning,
   $danger: colors.$danger,
-
-  // Component Colours
-  $content-heading-color: colors.$primary,
-  $footer-background-color: colors.$white,
   $link: colors.$primary,
-  $title-color: colors.$primary,
 
   // Typography
   $body-size: 18px,
@@ -38,15 +33,26 @@
   $fullhd-enabled: false,
 );
 
+@use '../node_modules/bulma/sass/utilities/mixins';
+
 @use 'prism_okaidia_theme' with (
   $prism-prefix: 'prism--'
 );
 
-.content figure.essay-image {
+.footer {
+  --bulma-footer-background-color: var(--bulma-scheme-main);
+}
+
+.title {
+  --bulma-title-color: var(--bulma-primary);
+}
+
+figure.essay-image {
   margin-left: 0;
   margin-right: 0;
+  margin-bottom: 3rem;
 
-  @include bulma.until(bulma.$desktop) {
+  @include mixins.touch {
     margin-left: -1.5rem;
     margin-right: -1.5rem;
   }

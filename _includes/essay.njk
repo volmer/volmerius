@@ -3,18 +3,16 @@ layout: base
 permalink: "/{{ page.fileSlug }}/"
 ---
 
-<div class="content">
-  <h1 class="title is-1">{{ title }}</h1>
+<h1 class="title is-1">{{ title }}</h1>
 
-  <p class="is-size-7 is-uppercase has-text-grey">
-    {{ page.date.toLocaleString('en', { dateStyle: "long", timeZone: 'America/Montreal' } ) }}
-  </p>
+<p class="is-size-7 is-uppercase has-text-grey mb-6">
+  {{ page.date.toLocaleString('en', { dateStyle: "long", timeZone: 'America/Montreal' } ) }}
+</p>
 
-  {% if image %}
-    <figure class="essay-image">
-      <img src="/images/{{ image }}" alt="{{ image_alt }}">
-    </figure>
-  {% endif %}
+{% if image %}
+  <figure class="essay-image">
+    <img src="/images/{{ image }}" alt="{{ image_alt }}">
+  </figure>
+{% endif %}
 
-  {{ content | safe }}
-</div>
+<div class="content">{{ content | safe }}</div>

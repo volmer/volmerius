@@ -1,7 +1,7 @@
-const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight')
-require('prismjs/plugins/custom-class/prism-custom-class')
+import syntaxHighlight from '@11ty/eleventy-plugin-syntaxhighlight';
+import 'prismjs/plugins/custom-class/prism-custom-class.js';
 
-module.exports = function (eleventyConfig) {
+export default function (eleventyConfig) {
   eleventyConfig.addPlugin(syntaxHighlight, {
     init: function ({ Prism }) {
       Prism.plugins.customClass.prefix('prism--')
@@ -29,4 +29,4 @@ module.exports = function (eleventyConfig) {
       }
     }
   })
-}
+};
